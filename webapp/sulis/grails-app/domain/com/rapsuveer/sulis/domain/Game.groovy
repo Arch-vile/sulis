@@ -15,7 +15,7 @@ class Game {
 		player1 nullable: false, blank: false
 		player2 nullable: false, blank: false
 		date nullable: false
-		points1 nullable: false
-		points2 nullable: false
+		points1 nullable: false, min: 0
+		points2 nullable: false, min: 0
     }
 }
