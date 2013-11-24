@@ -31,11 +31,10 @@ class GameTests {
 			   points2: "nullable"]));
     }
 	
-//	@Test
-//	void notBlankConstraints() {
-//		Game game = new Game(player1: "", player2: "", points1: 10, points2: 21, date: new LocalDate(2013,1,20));
-//		assert(!game.save())
-//		assertThat(game, fieldErrors(player1: "blank", player2: "blank"));
-//		
-//	}
+	@Test
+	void notBlankConstraints() {
+		Game game = new Game(player1: "", player2: "", points1: 10, points2: 21, date: new LocalDate(2013,1,20));
+		assert(!game.save())
+		assertThat(game, fieldErrors(player1: "blank", player2: "blank"));
+	}
 }

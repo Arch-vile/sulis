@@ -12,8 +12,8 @@ class Game {
 	
 	
     static constraints = {
-		player1 nullable: false
-		player2 nullable: false
+		player1 nullable: false, blank: false
+		player2 nullable: false, blank: false
 		date nullable: false
 		points1 nullable: false
 		points2 nullable: false
