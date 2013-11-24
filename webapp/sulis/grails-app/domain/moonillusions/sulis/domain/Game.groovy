@@ -1,4 +1,4 @@
-package com.rapsuveer.sulis.domain
+package moonillusions.sulis.domain
 
 import org.joda.time.LocalDate;
 

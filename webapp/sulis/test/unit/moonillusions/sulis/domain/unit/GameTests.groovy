@@ -1,13 +1,13 @@
-package com.rapsuveer.sulis.domain.unit
+package moonillusions.sulis.domain.unit
 
 
 
 import grails.test.mixin.*
+import moonillusions.sulis.domain.Game;
 
 import org.junit.*
 import org.joda.time.LocalDate
 
-import com.rapsuveer.sulis.domain.Game;
 import static moonillusions.grails.testing.matchers.FieldErrors.fieldErrors;
 
 
