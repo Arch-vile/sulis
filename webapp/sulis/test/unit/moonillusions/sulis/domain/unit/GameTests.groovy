@@ -9,6 +9,7 @@ import org.junit.*
 import org.joda.time.LocalDate
 
 import static moonillusions.grails.testing.matchers.FieldErrors.fieldErrors;
+import static moonillusions.grails.testing.matchers.FieldErrors.noFieldErrors;
 
 
 /**
@@ -23,6 +24,12 @@ class GameTests {
 	@Before
 	void setup() {
 		game = new Game(player1: "Juuso", player2: "Heikki", points1: 10, points2: 21, date: new LocalDate(2013,1,20));
+	}
+	
+	@Test
+	void happyCase() {
+		assert(game.save())
+		assertThat(game, noFieldErrors())
 	}
 	
 	
