@@ -9,6 +9,7 @@ import moonillusions.sulis.domain.Player;
 import org.junit.*
 
 import static moonillusions.grails.testing.matchers.FieldErrors.fieldErrors;
+import static moonillusions.grails.testing.matchers.FieldErrors.noFieldErrors;
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
@@ -27,7 +28,7 @@ class PlayerTests {
 	@Test
 	void happyCase() {
 		assert(player.save())
-		assertThat(player, fieldErrors([:]))
+		assertThat(player, noFieldErrors())
 	}
 	
 	@Test
@@ -44,7 +45,7 @@ class PlayerTests {
 		assertThat(player, fieldErrors(name: "size.toosmall"))
 		player.name = "ab"
 		assert(player.save())
-		assertThat(player, fieldErrors([:]))
+		assertThat(player, noFieldErrors())
 	}
 	
 	@Test
@@ -54,7 +55,7 @@ class PlayerTests {
 		assertThat(player, fieldErrors(name: "size.toobig"))
 		player.name = "123456789012345678901234567890"
 		assert(player.save())
-		assertThat(player, fieldErrors([:]))
+		assertThat(player, noFieldErrors())
 	}
    
 }

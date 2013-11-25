@@ -64,5 +64,10 @@ public class FieldErrors extends BaseMatcher<DefaultGrailsDomainClass> {
          return new FieldErrors(errorMap);
         }
         
+        @Factory
+        public static Matcher<DefaultGrailsDomainClass> noFieldErrors() {
+         return new FieldErrors(new HashMap<String,String>());
+        }
+        
         
 }
