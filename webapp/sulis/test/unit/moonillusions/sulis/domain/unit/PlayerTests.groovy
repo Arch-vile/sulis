@@ -58,4 +58,11 @@ class PlayerTests {
 		assertThat(player, noFieldErrors())
 	}
    
+	@Test
+	void nameUniqueContraint() {
+		Player player2 = new Player(name: player.name)
+		assert(player.save())
+		assert(!player2.save())
+		assertThat(player2, fieldErrors(name: "unique"))
+	}
 }
