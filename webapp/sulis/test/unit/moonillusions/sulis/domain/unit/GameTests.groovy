@@ -4,6 +4,7 @@ package moonillusions.sulis.domain.unit
 
 import grails.test.mixin.*
 import moonillusions.sulis.domain.Game;
+import moonillusions.sulis.domain.Player
 
 import org.junit.*
 import org.joda.time.LocalDate
@@ -16,14 +17,18 @@ import static moonillusions.grails.testing.matchers.FieldErrors.noFieldErrors;
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
 @TestFor(Game)
-@Mock(Game)
+@Mock([Game,Player])
 class GameTests {
 
 	Game game
+	Player player1
+	Player player2
 	
 	@Before
 	void setup() {
-		game = new Game(player1: "Juuso", player2: "Heikki", points1: 10, points2: 21, date: new LocalDate(2013,1,20));
+		player1 = new Player(name: "Jack")
+		player2 = new Player(name: "Jane")
+		game = new Game(player1: player1, player2: player2, points1: 10, points2: 21, date: new LocalDate(2013,1,20));
 	}
 	
 	@Test
@@ -31,7 +36,6 @@ class GameTests {
 		assert(game.save())
 		assertThat(game, noFieldErrors())
 	}
-	
 	
 	@Test
     void notNullConstraints() {
@@ -45,14 +49,6 @@ class GameTests {
 			   points1: "nullable",
 			   points2: "nullable"]));
     }
-	
-	@Test
-	void notBlankConstraints() {
-		game.player1 = ""
-		game.player2 = ""
-		assert(!game.save())
-		assertThat(game, fieldErrors(player1: "blank", player2: "blank"));
-	}
 	
 	@Test
 	void pointsNotNegative() {
