@@ -31,7 +31,7 @@ public class FieldErrors extends BaseMatcher<DefaultGrailsDomainClass> {
 
         @Override
         public void describeTo(Description description) {
-                description.appendText("Expected a domain object to fail on save() with errors: " + errors);
+                description.appendText("Expected a domain object with errors: " + errors);
         }
         
         @Override
