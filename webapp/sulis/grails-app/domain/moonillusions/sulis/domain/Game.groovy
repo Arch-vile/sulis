@@ -10,6 +10,10 @@ class Game {
 	Integer points1
 	Integer points2
 	
+	static mapping = {
+		player1 cascade: 'save-update'
+		player2 cascade: 'save-update'
+	}
 	
     static constraints = {
 		player1 nullable: false
