@@ -3,14 +3,20 @@ package moonillusions.sulis.domain.unit
 
 
 import grails.test.mixin.*
+import groovy.util.GroovyTestCase;
 import moonillusions.sulis.domain.Game;
 import moonillusions.sulis.domain.Player
 
 import org.junit.*
+
+import static org.junit.Assert.assertThat
+
 import org.joda.time.LocalDate
 
 import static moonillusions.grails.testing.matchers.FieldErrors.fieldErrors;
 import static moonillusions.grails.testing.matchers.FieldErrors.noFieldErrors;
+
+import grails.validation.ValidationException
 
 
 /**
@@ -40,7 +46,11 @@ class GameTests {
 	@Test
     void notNullConstraints() {
        Game game = new Game()
-	   assert(!game.save())
+	   
+	   shouldFail(ValidationException) {
+		   game.save()
+       }
+	   
 	   assertThat(game, fieldErrors(
 		   [
 			   player1: "nullable",
@@ -54,7 +64,9 @@ class GameTests {
 	void pointsNotNegative() {
 		game.points1 = -1
 		game.points2 = -1
-		assert(!game.save())
+		shouldFail(ValidationException) {
+		   game.save()
+		}
 		assertThat(game, fieldErrors(points1: "min.notmet", points2: "min.notmet"));
 	}
 }

@@ -59,6 +59,8 @@ grails.exceptionresolver.params.exclude = ['password']
 // configure auto-caching of queries by default (if false you can cache individual queries with 'cache: true')
 grails.hibernate.cache.queries = false
 
+grails.gorm.failOnError = true
+
 environments {
     development {
         grails.logging.jul.usebridge = true
@@ -73,9 +75,16 @@ environments {
 log4j = {
     // Example of changing the log pattern for the default console appender:
     //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
+    
+	environments {
+		test {
+			appenders {
+				console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+				//trace  'org.hibernate.type'
+				//debug  'org.hibernate.SQL'
+			}
+		}
+	}
 
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP

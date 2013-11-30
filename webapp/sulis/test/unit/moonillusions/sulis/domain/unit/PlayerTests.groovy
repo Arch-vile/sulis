@@ -6,7 +6,10 @@ import liquibase.exception.SetupException;
 import moonillusions.grails.testing.matchers.FieldErrors;
 import moonillusions.sulis.domain.Player;
 
+import static org.junit.Assert.assertThat
 import org.junit.*
+
+import grails.validation.ValidationException
 
 import static moonillusions.grails.testing.matchers.FieldErrors.fieldErrors;
 import static moonillusions.grails.testing.matchers.FieldErrors.noFieldErrors;
@@ -34,14 +37,18 @@ class PlayerTests {
 	@Test
 	void nullConstraints() {
 		player.name = null
-		assert(!player.save())
+		shouldFail(ValidationException) {
+			player.save()
+		}
 		assertThat(player, fieldErrors(name: "nullable"))
 	}
 	
 	@Test
 	void sizeMinConstraints() {
 		player.name = "a"
-		assert(!player.save())
+		shouldFail(ValidationException) {
+			player.save()
+		}
 		assertThat(player, fieldErrors(name: "size.toosmall"))
 		player.name = "ab"
 		assert(player.save())
@@ -51,7 +58,9 @@ class PlayerTests {
 	@Test
 	void sizeMaxConstraints() {
 		player.name = "1234567890123456789012345678901"
-		assert(!player.save())
+		shouldFail(ValidationException) {
+			player.save()
+		}
 		assertThat(player, fieldErrors(name: "size.toobig"))
 		player.name = "123456789012345678901234567890"
 		assert(player.save())
@@ -62,7 +71,9 @@ class PlayerTests {
 	void nameUniqueContraint() {
 		Player player2 = new Player(name: player.name)
 		assert(player.save())
-		assert(!player2.save())
+		shouldFail(ValidationException) {
+			player2.save()
+		}
 		assertThat(player2, fieldErrors(name: "unique"))
 	}
 }
