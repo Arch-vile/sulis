@@ -45,6 +45,7 @@ grails.project.dependency.resolution = {
 		runtime 'joda-time:joda-time:2.3'
 		test 'junit:junit:4.11'
 		test 'org.hamcrest:hamcrest-all:1.3'
+		test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
     }
 
     plugins {
@@ -62,5 +63,9 @@ grails.project.dependency.resolution = {
         runtime ":database-migration:1.3.2"
 
         compile ':cache:1.0.1'
+		
+		test(":spock:0.7") {
+			exclude "spock-grails-support"
+		  }
     }
 }
