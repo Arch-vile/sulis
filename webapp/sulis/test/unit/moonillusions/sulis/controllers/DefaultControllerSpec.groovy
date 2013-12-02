@@ -1,5 +1,7 @@
 package moonillusions.sulis.controllers
 
+import moonillusions.sulis.domain.Player;
+
 import org.spockframework.compiler.model.ThenBlock;
 
 import grails.test.mixin.TestFor
@@ -24,4 +26,17 @@ class DefaultControllerSpec extends Specification {
 		then:
 		controller.modelAndView.viewName == "/default/home"
 	}
+	
+	void "Index action should have players a model"() {
+		setup:
+		Player player1 = new Player()
+		Player player2 = new Player()
+		
+		when:
+		controller.index()
+		
+		then:
+		controller.modelAndView.modelMap['players'] == []
+	}
+	
 }
