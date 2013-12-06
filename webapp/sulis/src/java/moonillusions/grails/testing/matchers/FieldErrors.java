@@ -17,7 +17,6 @@ import org.springframework.validation.FieldError;
 
 
 import static org.hamcrest.Matchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 
 public class FieldErrors extends BaseMatcher<DefaultGrailsDomainClass> {
@@ -43,8 +42,7 @@ public class FieldErrors extends BaseMatcher<DefaultGrailsDomainClass> {
         @Override
         public boolean matches(Object domain) {
                 Map<String, String> errorMap = createErrorsMap(domain);
-                assertThat(errorMap, equalTo(this.errors));
-                return true;
+                return equalTo(this.errors).matches(errorMap);
         }
 
         private Map<String, String> createErrorsMap(Object domain) {
