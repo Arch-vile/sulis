@@ -1,15 +1,16 @@
 
+
 package moonillusions.sulis.domain.unit
 
 import grails.test.mixin.*
+import grails.validation.ValidationException;
 import liquibase.exception.SetupException;
 import moonillusions.grails.testing.matchers.FieldErrors;
 import moonillusions.sulis.domain.Player;
-
 import static org.junit.Assert.assertThat
-import org.junit.*
+import static org.hamcrest.Matchers.equalTo
 
-import grails.validation.ValidationException
+import org.junit.*
 
 import static moonillusions.grails.testing.matchers.FieldErrors.fieldErrors;
 import static moonillusions.grails.testing.matchers.FieldErrors.noFieldErrors;
@@ -18,7 +19,6 @@ import static moonillusions.grails.testing.matchers.FieldErrors.noFieldErrors;
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
 @TestFor(Player)
-@Mock(Player)
 class PlayerTests {
 
 	Player player
@@ -66,14 +66,15 @@ class PlayerTests {
 		assert(player.save())
 		assertThat(player, noFieldErrors())
 	}
-   
+	
 	@Test
 	void nameUniqueContraint() {
 		Player player2 = new Player(name: player.name)
-		assert(player.save())
+		assert(player.save(flush: true))
 		shouldFail(ValidationException) {
-			player2.save()
+				player2.save(flush: true)
 		}
 		assertThat(player2, fieldErrors(name: "unique"))
 	}
+
 }
