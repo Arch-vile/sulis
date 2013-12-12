@@ -1,1 +1,3 @@
-I am default/hello.gsp
+<p>
+	I am default. Say <span>hello!</span>
+</p>
