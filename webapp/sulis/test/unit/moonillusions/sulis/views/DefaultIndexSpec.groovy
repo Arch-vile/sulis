@@ -49,7 +49,7 @@ class DefaultIndexSpec extends Specification {
 		that text, equalTo("hello!")
 	}
 
-	void "startingPlayer selection lists players"() {
+	void "servingPlayer selection element lists players"() {
 
 		setup:
 		output = renderViewWithModel([players: [
@@ -58,19 +58,19 @@ class DefaultIndexSpec extends Specification {
 			]])
 
 		when:
-		HtmlSelect player1Selection = getElement("//select[@name='startingPlayer']")
+		HtmlSelect player1Selection = getElement("//select[@name='servingPlayer']")
 
 		then:
 		that player1Selection, hasOption("mikko", "mikko", 0);
 		that player1Selection, hasOption("sagi", "sagi", 1);
 	}
 
-	void "input field for new starting player"() {
+	void "servingPlayer input field for new player"() {
 		setup:
 		output = renderViewWithModel()
 		
 		when:
-		HtmlInput input = getElement("//input[@name='newStartingPlayer']")
+		HtmlInput input = getElement("//input[@name='newServingPlayer']")
 
 		then:
 		that input, not(nullValue())

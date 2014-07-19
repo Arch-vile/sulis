@@ -1,15 +1,18 @@
 
+
 package moonillusions.sulis.controllers
 
+import moonillusions.sulis.domain.Game;
 import moonillusions.sulis.domain.Player;
+import moonillusions.sulis.service.GameService;
 import moonillusions.sulis.service.PlayerService;
 import static org.hamcrest.Matchers.containsInAnyOrder
+import static org.hamcrest.Matchers.equalTo
 
 import org.spockframework.compiler.model.ThenBlock;
 
 import grails.test.mixin.TestFor
 import spock.lang.Specification
-
 import static moonillusions.grails.testing.matchers.ControllerView.renders
 import static moonillusions.grails.testing.matchers.ControllerModel.hasModel
 import static spock.util.matcher.HamcrestSupport.that
@@ -21,9 +24,11 @@ import static spock.util.matcher.HamcrestSupport.that
 class DefaultControllerSpec extends Specification {
 
 	PlayerService playerService = Mock(PlayerService)
+	GameService gameService = Mock(GameService)
 	
 	def setup() {
 		controller.playerService = playerService
+		controller.gameService = gameService
 	}
 
 	def cleanup() {
@@ -49,5 +54,20 @@ class DefaultControllerSpec extends Specification {
 		then:
 		that controller, hasModel('players',containsInAnyOrder(player2, player1))
 	}
+	
+	void "If inserted, the new serving player is used"() {
+		
+		when:
+		params.newServingPlayer = 'newSPlayer'
+		controller.create()
+		
+		then:
+		1 * gameService.create({ Game game -> 
+			assert game.player1.name == "newSPlayer"
+			true 
+		})
+	}
+	
+	
 	
 }
