@@ -50,7 +50,7 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
         // runtime 'mysql:mysql-connector-java:5.1.24'
 		
-		
+		test 'com.google.guava:guava:15.0'
 		test 'net.sourceforge.htmlunit:htmlunit:2.13'
 		
 //		compile 'xml-apis:xml-apis:1.4.01'
@@ -61,6 +61,7 @@ grails.project.dependency.resolution = {
 		test 'junit:junit:4.11'
 		test 'org.hamcrest:hamcrest-all:1.3'
 		test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
+		test "com.moonillusions.htmlUnitMatchers:htmlUnitMatchers:0.1"
 		//test 'net.sourceforge.htmlunit:htmlunit:2.13'
     }
 
@@ -87,6 +88,8 @@ grails.project.dependency.resolution = {
 			exclude "spock-grails-support"
 		  }
 		
-		test ":build-test-data:2.0.8"
+		
+		compile ":build-test-data:2.1.2"
+		compile ":fixtures:1.3"
     }
 }

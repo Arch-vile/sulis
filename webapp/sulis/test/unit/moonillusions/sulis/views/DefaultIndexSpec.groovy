@@ -1,4 +1,5 @@
 
+
 package moonillusions.sulis.views
 
 import moonillusions.sulis.controllers.DefaultController;
@@ -16,6 +17,7 @@ import static moonillusions.grails.testing.matchers.ControllerView.renders
 import static moonillusions.grails.testing.matchers.ControllerModel.hasModel
 import static org.hamcrest.Matchers.equalTo
 import static spock.util.matcher.HamcrestSupport.that
+import static com.moonillusions.htmlUnitMatchers.matchers.HasOption.hasOption
 
 import com.gargoylesoftware.htmlunit.StringWebResponse
 import com.gargoylesoftware.htmlunit.WebClient
@@ -31,14 +33,19 @@ import com.gargoylesoftware.htmlunit.html.HtmlSpan
 @TestMixin(GroovyPageUnitTestMixin)
 class DefaultIndexSpec extends Specification {
 
+	String output
 	
 	def setup() {
+		output = ""
 	}
 
 	def cleanup() {
 	}
 
 	void "Home page should say hello"() {
+		
+		setup:
+		output = renderViewWithModel()
 		
 		when:
 		String text = asText('//span')[0]
@@ -48,12 +55,25 @@ class DefaultIndexSpec extends Specification {
 		
 	}
 	
+	void "startingPlayer selection lists players"() {
+		
+		setup:
+		output = renderViewWithModel([players: [new Player(name: "mikko"), new Player(name: "sagi")]])
+		
+		when:
+		HtmlSelect player1Selection = getElement("//select[@id='startingPlayer']")
+		
+		then:
+		that player1Selection, hasOption("mikko", "mikko", 0);
+		that player1Selection, hasOption("sagi", "sagi", 1);
+	}
+	
+	
 	private getElement(xpath) {
-		String output = renderViewWithModel()
 		StringWebResponse resp = new StringWebResponse(output, new URL("http://localhost"))
 		WebClient client = new WebClient()
 		HtmlPage page = HTMLParser.parseHtml(resp, client.getCurrentWindow())
-		page.getByXPath(xpath)
+		page.getFirstByXPath(xpath)
 	}
 	
 	private asText(xpath) {
