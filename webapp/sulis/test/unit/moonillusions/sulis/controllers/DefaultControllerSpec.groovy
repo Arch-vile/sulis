@@ -9,6 +9,7 @@ import moonillusions.sulis.service.PlayerService;
 import static org.hamcrest.Matchers.containsInAnyOrder
 import static org.hamcrest.Matchers.equalTo
 
+import org.joda.time.LocalDate;
 import org.spockframework.compiler.model.ThenBlock;
 
 import grails.test.mixin.TestFor
@@ -34,12 +35,12 @@ class DefaultControllerSpec extends Specification {
 	def cleanup() {
 	}
 
-	void "Index action should redirect to home page"() {
+	void "Index action should redirect to index page"() {
 		when:
 		controller.index()
 		
 		then:
-		that controller, renders("/default/home")
+		view == null
 	}
 	
 	void "Index action should have all players in model"() {
@@ -49,23 +50,72 @@ class DefaultControllerSpec extends Specification {
 		playerService.list() >> [player1,player2]
 		
 		when:
-		controller.index()
+		def model = controller.index()
 		
 		then:
-		that controller, hasModel('players',containsInAnyOrder(player2, player1))
+		that model.players, containsInAnyOrder(player2, player1)
 	}
 	
-	void "If inserted, the new serving player is used"() {
-		
+	void "Players and scores used for new game"() {
+	
 		when:
-		params.newServingPlayer = 'newSPlayer'
+		params.'player1.name' = "serving player"
+		params.'player2.name' = "receiving player"
+		params.points1 = "21"
+		params.points2 = "10"
+		params.date = "2014-07-21"
 		controller.create()
 		
 		then:
 		1 * gameService.create({ Game game -> 
-			assert game.player1.name == "newSPlayer"
+			assert game.player1.name == "serving player"
+			assert game.player2.name == "receiving player"
+			assert game.points1 == 21
+			assert game.points2 == 10
+			assert game.date == new LocalDate("2014-07-21")
+			true
+		})
+	}
+	
+	void "If inserted, the new serving player is used for new game"() {
+		
+		when:
+		params.newServingPlayer = 'new player'
+		params.'player1.name' = "serving player"
+		controller.create()
+		
+		then:
+		1 * gameService.create({ Game game -> 
+			assert game.player1.name == "new player"
 			true 
 		})
+	}
+	
+	void "If inserted, the new receiving player is used for new game"() {
+		
+		when:
+		params.newReceivingPlayer = 'new player'
+		params.'player2.name' = "receiving player"
+		controller.create()
+		
+		then:
+		1 * gameService.create({ Game game ->
+			assert game.player2.name == "new player"
+			true
+		})
+	}
+	
+	void "Scores are required"() {
+		// TODO
+	}	
+	
+	void "Existing or new players required"() {
+		// TODO
+		
+	}
+	
+	void "Date is required"() {
+		// TODO
 	}
 	
 	

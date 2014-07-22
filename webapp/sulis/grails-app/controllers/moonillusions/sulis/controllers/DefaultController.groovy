@@ -11,7 +11,12 @@ class DefaultController {
 	GameService gameService
 	
     def index() { 
-		render(view: 'home', model: [players: playerService.list()])
+		def model = [ players: playerService.list() ]
+		if(flash.chainModel) {
+			return flash.chainModel.putAll(model)
+		}
+
+		model
 	}
 	
 	def create() {
@@ -21,7 +26,16 @@ class DefaultController {
 			game.player1 = new Player(name: params.newServingPlayer)
 		}
 		
+		if(params.newReceivingPlayer) {
+			game.player2 = new Player(name: params.newReceivingPlayer)
+		}
 		
-		gameService.create(game)
+		
+		if(gameService.create(game)) {
+			println "all ok"
+		} else {
+			println "something fail"
+			chain action: 'index', model: [game: game]
+		}
 	}
 }

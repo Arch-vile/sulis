@@ -89,6 +89,6 @@ class DefaultIndexSpec extends Specification {
 	}
 
 	private renderViewWithModel(myModel = [:]) {
-		render(view: '/default/home', model: myModel)
+		render(view: '/default/index', model: myModel)
 	}
 }
