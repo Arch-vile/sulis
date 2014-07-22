@@ -3,8 +3,6 @@
 package moonillusions.sulis.views
 
 import static com.moonillusions.htmlUnitMatchers.matchers.HasOption.hasOption
-import static moonillusions.grails.testing.matchers.ControllerModel.hasModel
-import static moonillusions.grails.testing.matchers.ControllerView.renders
 import static org.hamcrest.Matchers.containsInAnyOrder
 import static org.hamcrest.Matchers.equalTo
 import static org.hamcrest.core.IsNull.nullValue

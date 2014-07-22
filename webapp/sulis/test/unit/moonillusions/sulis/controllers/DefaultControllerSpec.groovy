@@ -14,8 +14,6 @@ import org.spockframework.compiler.model.ThenBlock;
 
 import grails.test.mixin.TestFor
 import spock.lang.Specification
-import static moonillusions.grails.testing.matchers.ControllerView.renders
-import static moonillusions.grails.testing.matchers.ControllerModel.hasModel
 import static spock.util.matcher.HamcrestSupport.that
 
 /**
