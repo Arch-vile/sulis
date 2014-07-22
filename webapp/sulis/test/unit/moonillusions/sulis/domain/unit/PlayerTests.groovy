@@ -30,7 +30,7 @@ class PlayerTests {
 	
 	@Test
 	void happyCase() {
-		assert(player.save())
+		assert(player.save(failOnError: true))
 		assertThat(player, noFieldErrors())
 	}
 	
@@ -38,7 +38,7 @@ class PlayerTests {
 	void nullConstraints() {
 		player.name = null
 		shouldFail(ValidationException) {
-			player.save()
+			player.save(failOnError: true)
 		}
 		assertThat(player, fieldErrors(name: "nullable"))
 	}
@@ -47,11 +47,11 @@ class PlayerTests {
 	void sizeMinConstraints() {
 		player.name = "a"
 		shouldFail(ValidationException) {
-			player.save()
+			player.save(failOnError: true)
 		}
 		assertThat(player, fieldErrors(name: "size.toosmall"))
 		player.name = "ab"
-		assert(player.save())
+		assert(player.save(failOnError: true))
 		assertThat(player, noFieldErrors())
 	}
 	
@@ -59,20 +59,20 @@ class PlayerTests {
 	void sizeMaxConstraints() {
 		player.name = "1234567890123456789012345678901"
 		shouldFail(ValidationException) {
-			player.save()
+			player.save(failOnError: true)
 		}
 		assertThat(player, fieldErrors(name: "size.toobig"))
 		player.name = "123456789012345678901234567890"
-		assert(player.save())
+		assert(player.save(failOnError: true))
 		assertThat(player, noFieldErrors())
 	}
 	
 	@Test
 	void nameUniqueContraint() {
 		Player player2 = new Player(name: player.name)
-		assert(player.save(flush: true))
+		assert(player.save(failOnError: true, flush: true))
 		shouldFail(ValidationException) {
-				player2.save(flush: true)
+				player2.save(failOnError: true, flush: true)
 		}
 		assertThat(player2, fieldErrors(name: "unique"))
 	}

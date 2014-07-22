@@ -30,18 +30,18 @@ class GameITTests extends GroovyTestCase {
 
     @Test
     void testSaveCascadesToPlayers() {
-        assert(game.save())
+        assert(game.save(failOnError: true))
 		assertThat(player1.id, notNullValue())
 		assertThat(player2.id, notNullValue())
     }
 	
 	@Test
 	void testException_OnCascadeErrors(){
-		assert(game.save())
+		assert(game.save(failOnError: true, flush: true))
 		player2.name = player1.name; // To violate the unique constraint
 		game.points1 = game.points1+1; // To cause update
 		shouldFail(ValidationException) {
-			game.save(flush: true)
+			game.save(failOnError: true, flush: true)
 		}
 	}
 	

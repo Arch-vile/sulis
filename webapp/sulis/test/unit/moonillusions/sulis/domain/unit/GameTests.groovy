@@ -39,7 +39,7 @@ class GameTests {
 	
 	@Test
 	void happyCase() {
-		assert(game.save())
+		assert(game.save(failOnError: true))
 		assertThat(game, noFieldErrors())
 	}
 	
@@ -48,7 +48,7 @@ class GameTests {
        Game game = new Game()
 	   
 	   shouldFail(ValidationException) {
-		   game.save()
+		   game.save(failOnError: true)
        }
 	   
 	   assertThat(game, fieldErrors(
@@ -65,7 +65,7 @@ class GameTests {
 		game.points1 = -1
 		game.points2 = -1
 		shouldFail(ValidationException) {
-		   game.save()
+		   game.save(failOnError: true)
 		}
 		assertThat(game, fieldErrors(points1: "min.notmet", points2: "min.notmet"));
 	}
