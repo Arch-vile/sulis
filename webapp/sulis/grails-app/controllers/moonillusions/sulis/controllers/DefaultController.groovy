@@ -11,12 +11,7 @@ class DefaultController {
 	GameService gameService
 	
     def index() { 
-		def model = [ players: playerService.list() ]
-		if(flash.chainModel) {
-			return flash.chainModel.putAll(model)
-		}
-
-		model
+		[ players: playerService.list() ]
 	}
 	
 	def create() {
