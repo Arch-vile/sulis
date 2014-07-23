@@ -87,6 +87,6 @@ class DefaultIndexSpec extends Specification {
 	}
 
 	private renderViewWithModel(myModel = [:]) {
-		render(view: '/default/index', model: myModel)
+		render(view: '/game/index', model: myModel)
 	}
 }
