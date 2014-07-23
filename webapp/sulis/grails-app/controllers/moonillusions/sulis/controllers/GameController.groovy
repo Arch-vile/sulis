@@ -5,7 +5,7 @@ import moonillusions.sulis.domain.Player
 import moonillusions.sulis.service.GameService;
 import moonillusions.sulis.service.PlayerService;
 
-class DefaultController {
+class GameController {
 	
 	PlayerService playerService
 	GameService gameService
@@ -25,12 +25,13 @@ class DefaultController {
 			game.player2 = new Player(name: params.newReceivingPlayer)
 		}
 		
-		
 		if(gameService.create(game)) {
 			println "all ok"
 		} else {
 			println "something fail"
 			chain action: 'index', model: [game: game]
 		}
-	}
+   }
+		
+	
 }

@@ -1,5 +1,3 @@
-
-
 package moonillusions.sulis.controllers
 
 import moonillusions.sulis.domain.Game;
@@ -9,6 +7,7 @@ import moonillusions.sulis.service.PlayerService;
 import static org.hamcrest.Matchers.containsInAnyOrder
 import static org.hamcrest.Matchers.equalTo
 
+import org.codehaus.groovy.grails.plugins.testing.GrailsMockHttpServletResponse;
 import org.joda.time.LocalDate;
 import org.spockframework.compiler.model.ThenBlock;
 
@@ -19,8 +18,8 @@ import static spock.util.matcher.HamcrestSupport.that
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
-@TestFor(DefaultController)
-class DefaultControllerSpec extends Specification {
+@TestFor(GameController)
+class GameControllerSpec extends Specification {
 
 	PlayerService playerService = Mock(PlayerService)
 	GameService gameService = Mock(GameService)
@@ -103,19 +102,20 @@ class DefaultControllerSpec extends Specification {
 		})
 	}
 	
-	void "Scores are required"() {
-		// TODO
-	}	
 	
-	void "Existing or new players required"() {
-		// TODO
+	void "If errors, the default view is shown and failed game attached" () {
 		
+		when:
+		gameService.create(_) >> null
+		controller.create()
+		
+		then: 'the failed game is passed forward'
+		controller.chainModel.game != null
+		
+		and: 'control passed to the index'
+		response.redirectUrl == '/' // Action is mapped to '/' because this is our default controller
+
 	}
-	
-	void "Date is required"() {
-		// TODO
-	}
-	
 	
 	
 }
