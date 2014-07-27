@@ -111,9 +111,14 @@ class GameControllerSpec extends Specification {
 		when:
 		controller.create()
 		
-		then:
+		then: 'Correct view is shown'
 		view == '/game/show'
+		
+		and: "Created game is shown"
 		model.game == game
+		
+		and: "Flash message indicating success is shown"
+		flash.message == 'gameController.message.game.created'
 	}
 	
 	

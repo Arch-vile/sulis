@@ -27,6 +27,7 @@ class GameController {
 		
 		Game created = gameService.create(game)
 		if( created ) {
+			flash.message = message(code: 'gameController.message.game.created')
 			render view: 'show', model: [game: created]
 		} else {
 			chain action: 'index', model: [game: game]
