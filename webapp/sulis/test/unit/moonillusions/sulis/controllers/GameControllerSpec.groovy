@@ -102,6 +102,20 @@ class GameControllerSpec extends Specification {
 		})
 	}
 	
+	void "If game created, the show view is shown"() {
+
+		setup: 'Service creates new game'
+		Game game = new Game()
+		gameService.create(_) >> game
+				
+		when:
+		controller.create()
+		
+		then:
+		view == '/game/show'
+		model.game == game
+	}
+	
 	
 	void "If errors on service, the default view is shown and failed game attached" () {
 		

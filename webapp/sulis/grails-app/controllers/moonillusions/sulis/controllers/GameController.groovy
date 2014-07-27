@@ -25,13 +25,13 @@ class GameController {
 			game.player2 = new Player(name: params.newReceivingPlayer)
 		}
 		
-		if(gameService.create(game)) {
-			println "all ok"
+		Game created = gameService.create(game)
+		if( created ) {
+			render view: 'show', model: [game: created]
 		} else {
-			println "something fail"
 			chain action: 'index', model: [game: game]
 		}
    }
-		
+	
 	
 }
