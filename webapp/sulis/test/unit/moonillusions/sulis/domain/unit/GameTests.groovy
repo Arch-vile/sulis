@@ -34,7 +34,7 @@ class GameTests {
 	void setup() {
 		player1 = new Player(name: "Jack")
 		player2 = new Player(name: "Jane")
-		game = new Game(player1: player1, player2: player2, points1: 10, points2: 21, date: new LocalDate(2013,1,20));
+		game = new Game(player1: player1, player2: player2, servPoints: 10, points2: 21, date: new LocalDate(2013,1,20));
 	}
 	
 	@Test
@@ -56,17 +56,17 @@ class GameTests {
 			   player1: "nullable",
 			   player2: "nullable",
 			   date: "nullable",
-			   points1: "nullable",
+			   servPoints: "nullable",
 			   points2: "nullable"]));
     }
 	
 	@Test
 	void pointsNotNegative() {
-		game.points1 = -1
+		game.servPoints = -1
 		game.points2 = -1
 		shouldFail(ValidationException) {
 		   game.save(failOnError: true)
 		}
-		assertThat(game, fieldErrors(points1: "min.notmet", points2: "min.notmet"));
+		assertThat(game, fieldErrors(servPoints: "min.notmet", points2: "min.notmet"));
 	}
 }

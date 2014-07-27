@@ -58,7 +58,7 @@ class GameControllerSpec extends Specification {
 		when:
 		params.'player1.name' = "serving player"
 		params.'player2.name' = "receiving player"
-		params.points1 = "21"
+		params.servPoints = "21"
 		params.points2 = "10"
 		params.date = "2014-07-21"
 		controller.create()
@@ -67,7 +67,7 @@ class GameControllerSpec extends Specification {
 		1 * gameService.create({ Game game -> 
 			assert game.player1.name == "serving player"
 			assert game.player2.name == "receiving player"
-			assert game.points1 == 21
+			assert game.servPoints == 21
 			assert game.points2 == 10
 			assert game.date == new LocalDate("2014-07-21")
 			true
@@ -123,11 +123,11 @@ class GameControllerSpec extends Specification {
 		gameService.create(_) >> null
 		
 		when: 'Create new game'
-		params.points1 = "10"
+		params.servPoints = "10"
 		controller.create()
 		
 		then: 'the failed game is passed forward'
-		controller.chainModel.game.points1 == 10
+		controller.chainModel.game.servPoints == 10
 		
 		and: 'control passed to the index'
 		response.redirectUrl == '/' // Action is mapped to '/' because this is our default controller
