@@ -24,7 +24,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlSelect
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
 @TestMixin(GroovyPageUnitTestMixin)
-class DefaultIndexSpec extends Specification {
+class GameIndexSpec extends Specification {
 
 	String output
 
