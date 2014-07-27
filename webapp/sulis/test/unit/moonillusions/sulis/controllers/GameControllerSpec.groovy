@@ -103,14 +103,17 @@ class GameControllerSpec extends Specification {
 	}
 	
 	
-	void "If errors, the default view is shown and failed game attached" () {
+	void "If errors on service, the default view is shown and failed game attached" () {
 		
-		when:
+		setup: 'Service call fails to create game'
 		gameService.create(_) >> null
+		
+		when: 'Create new game'
+		params.points1 = "10"
 		controller.create()
 		
 		then: 'the failed game is passed forward'
-		controller.chainModel.game != null
+		controller.chainModel.game.points1 == 10
 		
 		and: 'control passed to the index'
 		response.redirectUrl == '/' // Action is mapped to '/' because this is our default controller
