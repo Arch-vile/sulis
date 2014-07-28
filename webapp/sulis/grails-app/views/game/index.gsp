@@ -9,6 +9,10 @@
 	<g:select name="servingPlayer" from="${players}" optionKey="name" optionValue="name" />
 	or new  one <g:textField name="newServingPlayer"/>
 
+	<g:select name="receivingPlayer" from="${players}" optionKey="name" optionValue="name" />
+	
+	<g:select name="receivingPlayerScore" from="${[*21..0, *22..25]}" />
+
 	<g:submitButton name="create" />
 
 </g:form>
