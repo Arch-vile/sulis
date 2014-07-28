@@ -2,6 +2,8 @@
 
 package moonillusions.sulis.views
 
+import static com.moonillusions.htmlUnitMatchers.matchers.AsText.asText
+import static com.moonillusions.htmlUnitMatchers.matchers.HasAttribute.hasAttribute
 import static com.moonillusions.htmlUnitMatchers.matchers.HasOption.hasOption
 import static com.moonillusions.htmlUnitMatchers.matchers.HasOption.hasOptions
 import static org.hamcrest.Matchers.containsInAnyOrder
@@ -13,6 +15,8 @@ import grails.test.mixin.TestMixin
 import grails.test.mixin.web.GroovyPageUnitTestMixin
 import moonillusions.sulis.domain.Player
 import moonillusions.sulis.testing.HtmlUnitViewSpec;
+import org.joda.time.LocalDate
+import org.joda.time.format.DateTimeFormatter
 import spock.lang.Specification
 
 import com.gargoylesoftware.htmlunit.StringWebResponse
@@ -21,6 +25,9 @@ import com.gargoylesoftware.htmlunit.html.HTMLParser
 import com.gargoylesoftware.htmlunit.html.HtmlInput
 import com.gargoylesoftware.htmlunit.html.HtmlPage
 import com.gargoylesoftware.htmlunit.html.HtmlSelect
+
+import org.joda.time.format.DateTimeFormat
+import org.joda.time.LocalDate;
 
 @TestMixin(GroovyPageUnitTestMixin)
 class GameIndexSpec extends HtmlUnitViewSpec {
@@ -63,6 +70,24 @@ class GameIndexSpec extends HtmlUnitViewSpec {
 		that input, not(nullValue())
 	}
 	
+	void "receivingPlayer input field for new player"() {
+		
+		when: 'Get input for the new receiving player'
+		def input = renderViewWithModel(xpath: "//input[@name='newReceivingPlayer']")
+
+		then: 'Exists'
+		that input, not(nullValue())
+	}
+	
+	void "serving player points dropdown"() {
+		
+		when: 'Get serving player points selection'
+		def selection = renderViewWithModel(xpath: "//select[@name='servingPlayerScore']")
+		
+		then: 'Has numbers from 21-0,22,23,24,25'
+		that selection, hasOptions("21","20","19","18","17","16","15","14","13","12","11","10","9","8","7","6","5","4","3","2","1","0","22","23","24","25")
+	}
+	
 	void "receiving player points dropdown"() {
 		
 		when: 'Get receiving player points selection'
@@ -70,6 +95,19 @@ class GameIndexSpec extends HtmlUnitViewSpec {
 		
 		then: 'Has numbers from 21-0,22,23,24,25'
 		that selection, hasOptions("21","20","19","18","17","16","15","14","13","12","11","10","9","8","7","6","5","4","3","2","1","0","22","23","24","25")
+	}
+	
+	void "game date field"() {
+		
+		setup:
+		DateTimeFormatter fmt = DateTimeFormat.forPattern("d.M.yyyy");
+		
+		when: 'Get the game date field'
+		def date = renderViewWithModel(xpath: "//input[@name='gameDate']")
+		
+		then: 'Has current date as default'
+		that date, hasAttribute("value",LocalDate.now().toString(fmt))
+		
 	}
 
 

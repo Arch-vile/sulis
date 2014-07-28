@@ -10,8 +10,13 @@
 	or new  one <g:textField name="newServingPlayer"/>
 
 	<g:select name="receivingPlayer" from="${players}" optionKey="name" optionValue="name" />
+	or new  one <g:textField name="newReceivingPlayer"/>
 	
-	<g:select name="receivingPlayerScore" from="${[*21..0, *22..25]}" />
+	receiving score: <g:select name="receivingPlayerScore" from="${[*21..0, *22..25]}" />
+	
+	serving score: <g:select name="servingPlayerScore" from="${[*21..0, *22..25]}" />
+
+	<g:textField name="gameDate" value="${formatDate(format:'d.M.yyyy',date: new Date())}"/>
 
 	<g:submitButton name="create" />
 
