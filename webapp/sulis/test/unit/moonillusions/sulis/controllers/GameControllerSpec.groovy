@@ -8,7 +8,9 @@ import static org.hamcrest.Matchers.containsInAnyOrder
 import static org.hamcrest.Matchers.equalTo
 
 import org.codehaus.groovy.grails.plugins.testing.GrailsMockHttpServletResponse;
-import org.joda.time.LocalDate;
+import org.codehaus.groovy.runtime.metaclass.NewStaticMetaMethod;
+import org.joda.time.DateTimeUtils;
+import org.joda.time.LocalDate
 import org.spockframework.compiler.model.ThenBlock;
 
 import grails.test.mixin.TestFor
@@ -23,45 +25,63 @@ class GameControllerSpec extends Specification {
 
 	PlayerService playerService = Mock(PlayerService)
 	GameService gameService = Mock(GameService)
+	LocalDate currentDate
 	
 	def setup() {
 		controller.playerService = playerService
 		controller.gameService = gameService
+		currentDate = new LocalDate().minusDays(10);
+		DateTimeUtils.setCurrentMillisFixed(currentDate.getLocalMillis())
+		
 	}
 
 	def cleanup() {
 	}
-
-	void "Index action should redirect to index page"() {
+	
+	
+	void "After interceptor is applied to all actions and populates model with players list"() {
+		
+		setup: 'Mock playerService player listing'
+		def listOfPlayers = [new Player()]
+		playerService.list() >> listOfPlayers
+		
+		when: 'Interceptor is applied to actions models'
+		def model = [name: "some"]
+		controller.afterInterceptor(model)
+		
+		then: 'Player list is populated'
+		model.players == listOfPlayers
+		model.name == "some"
+		
+	}
+	
+	void "Index action renders the create view with prepopulated command"() {
+		
 		when:
 		controller.index()
 		
-		then:
-		view == null
-	}
-	
-	void "Index action should have all players in model"() {
-		setup:
-		Player player1 = new Player()
-		Player player2 = new Player()
-		playerService.list() >> [player1,player2]
+		then: 'Create view is shown'
+		view == '/game/create'
 		
-		when:
-		def model = controller.index()
+		and: 'Command has the current data populated'
+		model.command.game.date == currentDate
 		
-		then:
-		that model.players, containsInAnyOrder(player2, player1)
 	}
+
 	
-	void "Players and scores used for new game"() {
 	
-		when:
-		params.'player1.name' = "serving player"
-		params.'player2.name' = "receiving player"
-		params.servPoints = "21"
-		params.points2 = "10"
-		params.date = "2014-07-21"
-		controller.create()
+	void "Create actions creates new game"() {
+	
+		setup: 
+		def commandObject = new CreateGameCommand(game: new Game(
+			player1: new Player(name: "serving player"),
+			player2: new Player(name: "receiving player"),
+			servPoints: 21,
+			points2: 10,
+			date: currentDate))
+
+		when: 'create action is called'
+		controller.create(commandObject)
 		
 		then:
 		1 * gameService.create({ Game game -> 
@@ -69,17 +89,18 @@ class GameControllerSpec extends Specification {
 			assert game.player2.name == "receiving player"
 			assert game.servPoints == 21
 			assert game.points2 == 10
-			assert game.date == new LocalDate("2014-07-21")
+			assert game.date == currentDate
 			true
 		})
 	}
 	
-	void "If inserted, the new serving player is used for new game"() {
+	void "If given, the new serving player is used for new game"() {
 		
-		when:
-		params.newServingPlayer = 'new player'
-		params.'player1.name' = "serving player"
-		controller.create()
+		given: 'Command with new player'
+		def command = new CreateGameCommand(newServingPlayerName: "new player", game: new Game())
+		
+		when: 'Create action is called'
+		controller.create(command)
 		
 		then:
 		1 * gameService.create({ Game game -> 
@@ -88,17 +109,18 @@ class GameControllerSpec extends Specification {
 		})
 	}
 	
-	void "If inserted, the new receiving player is used for new game"() {
+	void "If given, the new receiving player is used for new game"() {
 		
-		when:
-		params.newReceivingPlayer = 'new player'
-		params.'player2.name' = "receiving player"
-		controller.create()
+		given: 'Command with new player'
+		def command = new CreateGameCommand(newReceivingPlayerName: "new player", game: new Game())
+		
+		when: 'Create action is called'
+		controller.create(command)
 		
 		then:
-		1 * gameService.create({ Game game ->
+		1 * gameService.create({ Game game -> 
 			assert game.player2.name == "new player"
-			true
+			true 
 		})
 	}
 	
@@ -109,12 +131,12 @@ class GameControllerSpec extends Specification {
 		gameService.create(_) >> game
 				
 		when:
-		controller.create()
+		controller.create(new CreateGameCommand())
 		
 		then: 'Correct view is shown'
 		view == '/game/show'
 		
-		and: "Created game is shown"
+		and: "Created game is given as model"
 		model.game == game
 		
 		and: "Flash message indicating success is shown"
@@ -122,22 +144,23 @@ class GameControllerSpec extends Specification {
 	}
 	
 	
-	void "If errors on service, the default view is shown and failed game attached" () {
+	void "If errors on service, the same view is shown with same command" () {
 		
 		setup: 'Service call fails to create game'
 		gameService.create(_) >> null
 		
 		when: 'Create new game'
-		params.servPoints = "10"
-		controller.create()
+		def command = new CreateGameCommand()
+		def model = controller.create(command)
 		
 		then: 'the failed game is passed forward'
-		controller.chainModel.game.servPoints == 10
+		model.command == command
 		
-		and: 'control passed to the index'
-		response.redirectUrl == '/' // Action is mapped to '/' because this is our default controller
+		and: 'create view is shown again per conventions'
+		view == null
 
 	}
+	
 	
 	
 }

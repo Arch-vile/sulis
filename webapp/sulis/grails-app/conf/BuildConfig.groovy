@@ -57,7 +57,6 @@ grails.project.dependency.resolution = {
 //		test 'xml-apis:xml-apis:1.4.01'
 //		build 'xml-apis:xml-apis:1.4.01'
 		
-		runtime 'joda-time:joda-time:2.3'
 		test 'junit:junit:4.11'
 		test 'org.hamcrest:hamcrest-all:1.3'
 		test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
@@ -88,5 +87,6 @@ grails.project.dependency.resolution = {
 		
 		compile ":build-test-data:2.1.2"
 		compile ":fixtures:1.3"
+		compile ":joda-time:1.5"
     }
 }

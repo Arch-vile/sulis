@@ -1,6 +1,7 @@
 package moonillusions.sulis.domain
 
-import org.joda.time.LocalDate;
+import org.joda.time.LocalDate
+
 
 class Game {
 

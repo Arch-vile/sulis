@@ -2,7 +2,7 @@
 	I am default. Say <span>hello!</span>
 </p>
 
-<g:renderErrors as="list" bean="${game}"/>
+<g:renderErrors as="list" bean="${command.game}"/>
 
 <g:form action="create">
 
@@ -16,7 +16,8 @@
 	
 	serving score: <g:select name="servingPlayerScore" from="${[*21..0, *22..25]}" />
 
-	<g:textField name="gameDate" value="${formatDate(format:'d.M.yyyy',date: new Date())}"/>
+	<g:textField name="command.game.date" value="${formatDate(format:'d.M.yyyy',date: command.game.date)}"/>
+
 
 	<g:submitButton name="create" />
 
