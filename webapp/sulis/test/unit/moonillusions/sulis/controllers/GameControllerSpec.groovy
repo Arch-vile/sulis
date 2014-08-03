@@ -69,29 +69,17 @@ class GameControllerSpec extends Specification {
 	}
 
 	
-	
-	void "Create actions creates new game"() {
+	void "Create action creates new game"() {
 	
 		setup: 
-		def commandObject = new CreateGameCommand(game: new Game(
-			player1: new Player(name: "serving player"),
-			player2: new Player(name: "receiving player"),
-			servPoints: 21,
-			points2: 10,
-			date: currentDate))
+		def game = new Game()
+		def commandObject = new CreateGameCommand(game: game)
 
 		when: 'create action is called'
 		controller.create(commandObject)
 		
-		then:
-		1 * gameService.create({ Game game -> 
-			assert game.player1.name == "serving player"
-			assert game.player2.name == "receiving player"
-			assert game.servPoints == 21
-			assert game.points2 == 10
-			assert game.date == currentDate
-			true
-		})
+		then: 'Service is called with the game'
+		1 * gameService.create(game)
 	}
 	
 	void "If given, the new serving player is used for new game"() {
