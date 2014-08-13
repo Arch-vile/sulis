@@ -64,4 +64,12 @@ public class SafeNavigation {
 		return new SafeNavigation(clazz, expression).toString();
 	}
 	
+	public static String prop(Object object, String expression){
+		return new SafeNavigation(object.getClass(), expression).toString();
+	}
+	
+	public static String bind(Object object, String expression){
+		return new SafeNavigation(object.getClass(), expression).toString();
+	}
+	
 }
