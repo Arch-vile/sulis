@@ -7,6 +7,7 @@ grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
+
 grails.project.fork = [
     // configure settings for compilation JVM, note that if you alter the Groovy version forked compilation is required
     //  compile: [maxMemory: 256, minMemory: 64, debug: false, maxPerm: 256, daemon:true],
@@ -49,31 +50,31 @@ grails.project.dependency.resolution = {
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
         // runtime 'mysql:mysql-connector-java:5.1.24'
-		
-		test 'com.google.guava:guava:15.0'
-		test 'net.sourceforge.htmlunit:htmlunit:2.13'
-		
-//		compile 'xml-apis:xml-apis:1.4.01'
-//		test 'xml-apis:xml-apis:1.4.01'
-//		build 'xml-apis:xml-apis:1.4.01'
-		
-		test 'junit:junit:4.11'
-		test 'org.hamcrest:hamcrest-all:1.3'
-		test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
-		test "com.moonillusions.htmlUnitMatchers:htmlUnitMatchers:0.1"
-		//test 'net.sourceforge.htmlunit:htmlunit:2.13'
+
+        test 'com.google.guava:guava:15.0'
+        test 'net.sourceforge.htmlunit:htmlunit:2.13'
+
+        //		compile 'xml-apis:xml-apis:1.4.01'
+        //		test 'xml-apis:xml-apis:1.4.01'
+        //		build 'xml-apis:xml-apis:1.4.01'
+
+        test 'junit:junit:4.11'
+        test 'org.hamcrest:hamcrest-all:1.3'
+        test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
+        test "com.moonillusions.htmlUnitMatchers:htmlUnitMatchers:0.1"
+        //test 'net.sourceforge.htmlunit:htmlunit:2.13'
     }
 
     plugins {
         // plugins for the build system only
-		build ':tomcat:7.0.54'
+        build ':tomcat:7.0.54'
 
         // plugins for the compile step
-		compile ':scaffolding:2.1.2'
-		
-		// Using 1.1.6 as a solution for https://jira.grails.org/browse/GRAILS-11535
-		compile ':cache:1.1.6'
-		compile ':asset-pipeline:1.8.11'
+        compile ':scaffolding:2.1.2'
+
+        // Using 1.1.6 as a solution for https://jira.grails.org/browse/GRAILS-11535
+        compile ':cache:1.1.6'
+        compile ':asset-pipeline:1.8.11'
 
         // plugins needed at runtime but not for compilation
         runtime ':hibernate4:4.3.5.4'
@@ -84,9 +85,9 @@ grails.project.dependency.resolution = {
         //runtime ":zipped-resources:1.0.1"
         //runtime ":cached-resources:1.1"
         //runtime ":yui-minify-resources:0.1.5"
-		
-		compile ":build-test-data:2.1.2"
-		compile ":fixtures:1.3"
-		compile ":joda-time:1.5"
+
+        compile ":build-test-data:2.1.2"
+        compile ":fixtures:1.3"
+        compile ":joda-time:1.5"
     }
 }
