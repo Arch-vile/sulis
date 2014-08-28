@@ -85,14 +85,14 @@ class GameControllerSpec extends Specification {
 	void "If given, the new serving player is used for new game"() {
 		
 		given: 'Command with new player'
-		def command = new CreateGameCommand(newServingPlayerName: "new player", game: new Game())
+		def command = new CreateGameCommand(newServingPlayer: "new player", game: new Game())
 		
 		when: 'Create action is called'
 		controller.create(command)
 		
 		then:
 		1 * gameService.create({ Game game -> 
-			assert game.player1.name == "new player"
+			assert game.servingPlayer.name == "new player"
 			true 
 		})
 	}
@@ -100,14 +100,14 @@ class GameControllerSpec extends Specification {
 	void "If given, the new receiving player is used for new game"() {
 		
 		given: 'Command with new player'
-		def command = new CreateGameCommand(newReceivingPlayerName: "new player", game: new Game())
+		def command = new CreateGameCommand(newReceivingPlayer: "new player", game: new Game())
 		
 		when: 'Create action is called'
 		controller.create(command)
 		
 		then:
 		1 * gameService.create({ Game game -> 
-			assert game.player2.name == "new player"
+			assert game.receivingPlayer.name == "new player"
 			true 
 		})
 	}

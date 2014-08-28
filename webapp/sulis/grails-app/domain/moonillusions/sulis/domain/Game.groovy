@@ -5,22 +5,22 @@ import org.joda.time.LocalDate
 
 class Game {
 
-	Player player1
-	Player player2
+	Player servingPlayer
+	Player receivingPlayer
 	LocalDate date
-	Integer servPoints
-	Integer points2
+	Integer servingPlayerPoints
+	Integer receivingPlayerPoints
 	
 	static mapping = {
-		player1 cascade: 'save-update'
-		player2 cascade: 'save-update'
+		servingPlayer cascade: 'save-update'
+		receivingPlayer cascade: 'save-update'
 	}
 	
     static constraints = {
-		player1 nullable: false
-		player2 nullable: false
+		servingPlayer nullable: false
+		receivingPlayer nullable: false
 		date nullable: false
-		servPoints nullable: false, min: 0
-		points2 nullable: false, min: 0
+		servingPlayerPoints nullable: false, min: 0
+		receivingPlayerPoints nullable: false, min: 0
     }
 }

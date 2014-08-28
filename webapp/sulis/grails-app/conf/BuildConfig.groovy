@@ -7,7 +7,6 @@ grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
-
 grails.project.fork = [
     // configure settings for compilation JVM, note that if you alter the Groovy version forked compilation is required
     //  compile: [maxMemory: 256, minMemory: 64, debug: false, maxPerm: 256, daemon:true],
@@ -63,6 +62,8 @@ grails.project.dependency.resolution = {
         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
         test "com.moonillusions.htmlUnitMatchers:htmlUnitMatchers:0.1"
         //test 'net.sourceforge.htmlunit:htmlunit:2.13'
+
+        test 'com.moonillusions.utils:PropertyNavigation:1.0-SNAPSHOT'
     }
 
     plugins {

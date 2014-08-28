@@ -20,7 +20,7 @@ class GameITTests extends GroovyTestCase {
     void setUp() {
         player1 = new Player(name: "Jack")
 		player2 = new Player(name: "Jane")
-		game = new Game(player1: player1, player2: player2, servPoints: 12, points2: 21, date: new LocalDate(2013,1,20));
+		game = new Game(servingPlayer: player1, receivingPlayer: player2, servingPlayerPoints: 12, receivingPlayerPoints: 21, date: new LocalDate(2013,1,20));
     }
 
     @After
@@ -39,7 +39,7 @@ class GameITTests extends GroovyTestCase {
 	void testException_OnCascadeErrors(){
 		assert(game.save(failOnError: true, flush: true))
 		player2.name = player1.name; // To violate the unique constraint
-		game.servPoints = game.servPoints+1; // To cause update
+		game.servingPlayerPoints = game.servingPlayerPoints+1; // To cause update
 		shouldFail(ValidationException) {
 			game.save(failOnError: true, flush: true)
 		}
