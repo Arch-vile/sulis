@@ -42,7 +42,6 @@
 		name="${prop(to(CreateGameCommand.class).game.date) }" 
 		value="${formatDate(format:'d.M.yyyy',date: command?.game?.date?.toDate())}"/>
 
-
 	<g:submitButton name="create" />
 
 </g:form>

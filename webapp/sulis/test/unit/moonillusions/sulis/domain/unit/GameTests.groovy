@@ -1,7 +1,6 @@
 package moonillusions.sulis.domain.unit
 
 
-
 import static moonillusions.grails.testing.matchers.FieldErrors.fieldErrors
 import static moonillusions.grails.testing.matchers.FieldErrors.noFieldErrors
 import static org.junit.Assert.assertThat
@@ -21,47 +20,47 @@ import org.junit.*
 @Mock([Game,Player])
 class GameTests {
 
-	Game game
-	Player player1
-	Player player2
+    Game game
+    Player player1
+    Player player2
 
-	@Before
-	void setup() {
-		player1 = new Player(name: "Jack")
-		player2 = new Player(name: "Jane")
-		game = new Game(servingPlayer: player1, receivingPlayer: player2, servingPlayerPoints: 10, receivingPlayerPoints: 21, date: new LocalDate(2013,1,20));
-	}
+    @Before
+    void setup() {
+        player1 = new Player(name: "Jack")
+        player2 = new Player(name: "Jane")
+        game = new Game(servingPlayer: player1, receivingPlayer: player2, servingPlayerPoints: 10, receivingPlayerPoints: 21, date: new LocalDate(2013,1,20));
+    }
 
-	@Test
-	void happyCase() {
-		assert(game.save(failOnError: true))
-		assertThat(game, noFieldErrors())
-	}
+    @Test
+    void happyCase() {
+        assert(game.save(failOnError: true))
+        assertThat(game, noFieldErrors())
+    }
 
-	@Test
-	void notNullConstraints() {
-		Game game = new Game()
+    @Test
+    void notNullConstraints() {
+        Game game = new Game()
 
-		shouldFail(ValidationException) {
-			game.save(failOnError: true)
-		}
+        shouldFail(ValidationException) {
+            game.save(failOnError: true)
+        }
 
-		assertThat(game, fieldErrors(
-				[
-					servingPlayer: "nullable",
-					receivingPlayer: "nullable",
-					date: "nullable",
-					servingPlayerPoints: "nullable",
-					receivingPlayerPoints: "nullable"]));
-	}
+        assertThat(game, fieldErrors(
+                [
+                    servingPlayer: "nullable",
+                    receivingPlayer: "nullable",
+                    date: "nullable",
+                    servingPlayerPoints: "nullable",
+                    receivingPlayerPoints: "nullable"]));
+    }
 
-	@Test
-	void pointsNotNegative() {
-		game.servingPlayerPoints = -1
-		game.receivingPlayerPoints = -1
-		shouldFail(ValidationException) {
-			game.save(failOnError: true)
-		}
-		assertThat(game, fieldErrors(servingPlayerPoints: "min.notmet", receivingPlayerPoints: "min.notmet"));
-	}
+    @Test
+    void pointsNotNegative() {
+        game.servingPlayerPoints = -1
+        game.receivingPlayerPoints = -1
+        shouldFail(ValidationException) {
+            game.save(failOnError: true)
+        }
+        assertThat(game, fieldErrors(servingPlayerPoints: "min.notmet", receivingPlayerPoints: "min.notmet"));
+    }
 }
