@@ -64,7 +64,7 @@ grails.project.dependency.resolution = {
         test "com.moonillusions.htmlUnitMatchers:htmlUnitMatchers:0.1"
         //test 'net.sourceforge.htmlunit:htmlunit:2.13'
 
-        test 'com.moonillusions.utils:PropertyNavigation:1.0-SNAPSHOT'
+        compile 'com.moonillusions.utils:PropertyNavigation:1.0-SNAPSHOT'
     }
 
     plugins {

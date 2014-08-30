@@ -129,5 +129,12 @@ class GameCreateSpec extends HtmlUnitViewSpec {
         that date, hasAttribute("value",LocalDate.now().toString(fmt))
     }
 
-    // TODO:-  submit button - form action
+    void "submit to create action on default controller" () {
+
+        when: 'Get the form'
+        def form = renderViewWithModel(model: model, xpath: "//form[//input[@type='submit' and @value='create']]")
+
+        then: 'action mapped to the create action on default controller'
+        that form, hasAttribute("action","/test/create")
+    }
 }
