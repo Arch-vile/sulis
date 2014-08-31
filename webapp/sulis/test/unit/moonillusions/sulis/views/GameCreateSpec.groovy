@@ -30,13 +30,13 @@ import org.joda.time.format.DateTimeFormatter
 @TestMixin(GroovyPageUnitTestMixin)
 class GameCreateSpec extends HtmlUnitViewSpec {
 
-    private static final GAME_RECEIVINGPLAYER_FIELD = prop(to(CreateGameCommand.class).game.receivingPlayer)
-    private static final GAME_SERVINGPLAYER_FIELD =   prop(to(CreateGameCommand.class).game.servingPlayer)
-    private static final NEWSERVINGPLAYER_FIELD = prop(to(CreateGameCommand.class).newServingPlayer)
-    private static final NEWRECEIVINGPLAYER_FIELD = prop(to(CreateGameCommand.class).newReceivingPlayer)
-    private static final GAME_SERVINGPLAYERPOINTS_FIELD = prop(to(CreateGameCommand.class).game.servingPlayerPoints)
-    private static final GAME_RECEIVINGPLAYERPOINTS_FIELD = prop(to(CreateGameCommand.class).game.receivingPlayerPoints)
-    private static final GAME_DATE = prop(to(CreateGameCommand.class).game.date)
+    private static final GAME_RECEIVINGPLAYER_FIELD = prop(of(CreateGameCommand.class).game.receivingPlayer)
+    private static final GAME_SERVINGPLAYER_FIELD =   prop(of(CreateGameCommand.class).game.servingPlayer)
+    private static final NEWSERVINGPLAYER_FIELD = prop(of(CreateGameCommand.class).newServingPlayer)
+    private static final NEWRECEIVINGPLAYER_FIELD = prop(of(CreateGameCommand.class).newReceivingPlayer)
+    private static final GAME_SERVINGPLAYERPOINTS_FIELD = prop(of(CreateGameCommand.class).game.servingPlayerPoints)
+    private static final GAME_RECEIVINGPLAYERPOINTS_FIELD = prop(of(CreateGameCommand.class).game.receivingPlayerPoints)
+    private static final GAME_DATE = prop(of(CreateGameCommand.class).game.date)
 
     def model
 
@@ -48,6 +48,19 @@ class GameCreateSpec extends HtmlUnitViewSpec {
             ],
             createGameCommand: new CreateGameCommand(game: new Game(date: LocalDate.now()))
         ];
+    }
+
+    void "bind values are shown"() {
+        //TODO: tests for all fields
+
+        setup: 'Binded values'
+        model.createGameCommand.newServingPlayer = "John"
+
+        when: 'Render'
+        def output = renderViewWithModel(model: model)
+
+        then: 'Binded value shown'
+        that getInput(NEWSERVINGPLAYER_FIELD,output), hasAttribute("value","John")
     }
 
 
@@ -129,8 +142,4 @@ class GameCreateSpec extends HtmlUnitViewSpec {
         then: 'action mapped to the create action on default controller'
         that form, hasAttribute("action","/test/create")
     }
-
-
-    // TODO: field values accordingly to model
-
 }
