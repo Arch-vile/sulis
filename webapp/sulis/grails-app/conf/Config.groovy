@@ -90,6 +90,8 @@ log4j = {
     // Example of changing the log pattern for the default console appender:
     //
 
+    root { info()  }
+
     environments {
         test {
             appenders {
