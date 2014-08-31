@@ -18,7 +18,7 @@ class GameController {
 
     def index(CreateGameCommand command) {
         command.game = new Game(date: new LocalDate())
-        render view: 'create', model: [command: command]
+        render view: 'create', model: [createGameCommand: command]
     }
 
     def create(CreateGameCommand command) {
@@ -37,6 +37,6 @@ class GameController {
             render view: 'show', model: [game: created]
         }
 
-        return [command: command];
+        return [createGameCommand: command];
     }
 }
