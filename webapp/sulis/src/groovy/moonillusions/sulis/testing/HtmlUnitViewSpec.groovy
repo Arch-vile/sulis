@@ -20,6 +20,11 @@ class HtmlUnitViewSpec extends Specification {
     }
 
 
+    def getInput(name, html) {
+        getElement("//input[@name='$name']", html)
+    }
+
+
     def renderViewWithModel(arguments = [:]) {
         def view = arguments.view ?: defaultName()
         assert view, "No view defined. Introduce 'view' class variable or give as method argument"
