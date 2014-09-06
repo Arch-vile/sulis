@@ -13,7 +13,8 @@
 		from="${players}"
 		optionKey="id"
 		optionValue="name"
-		value="${fieldValue(bean: createGameCommand, field: 'game.servingPlayer.id')}"/>
+		value="${fieldValue(bean: createGameCommand, field: 'game.servingPlayer.id')}"
+		noSelection="['':'-- Choose --']"/>
 	<br/>
 	or new  one:  
 		
@@ -26,7 +27,8 @@
 		from="${players}" 
 		optionKey="id" 
 		optionValue="name"
-		value="${fieldValue(bean: createGameCommand, field: 'game.receivingPlayer.id')}"/>
+		value="${fieldValue(bean: createGameCommand, field: 'game.receivingPlayer.id')}"
+		noSelection="['':'-- Choose --']"/>
 		
 	<br/>
 	or new  one

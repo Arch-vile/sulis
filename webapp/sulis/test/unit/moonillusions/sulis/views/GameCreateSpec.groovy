@@ -85,8 +85,8 @@ class GameCreateSpec extends HtmlUnitViewSpec {
         then: 'Binded value shown'
         that getInput(NEWSERVINGPLAYER_FIELD,output), hasAttribute("value","John")
         that getInput(NEWRECEIVINGPLAYER_FIELD,output), hasAttribute("value","Mary")
-        that getSelect(GAME_SERVINGPLAYER_SELECT,output), hasOption("server",server.id,true,0)
-        that getSelect(GAME_RECEIVINGPLAYER_SELECT,output), hasOption("receiver",receiver.id,true,1)
+        that getSelect(GAME_SERVINGPLAYER_SELECT,output), hasOption("server",server.id,true,1)
+        that getSelect(GAME_RECEIVINGPLAYER_SELECT,output), hasOption("receiver",receiver.id,true,2)
         that getSelect(GAME_SERVINGPLAYERPOINTS_SELECT, output), hasOption("24",24,true,24)
         that getSelect(GAME_RECEIVINGPLAYERPOINTS_SELECT, output), hasOption("12",12,true,9)
         that getInput(GAME_DATE, output), hasAttribute("value","25.6.2014")
@@ -97,11 +97,12 @@ class GameCreateSpec extends HtmlUnitViewSpec {
 
         when: 'Get serving player select element'
         println GAME_SERVINGPLAYER_SELECT
-        def servingPlayerSelection = renderViewWithModel(model: modelWithTemplateValues, xpath: "//select[@name='${GAME_SERVINGPLAYER_SELECT}']")
+        def selection = renderViewWithModel(model: modelWithTemplateValues, xpath: "//select[@name='${GAME_SERVINGPLAYER_SELECT}']")
 
         then: 'Has expected players as selections'
-        that servingPlayerSelection, hasOption("server", server.id, false, 0)
-        that servingPlayerSelection, hasOption("receiver", receiver.id, false, 1)
+        that selection, hasOption("-- Choose --", "", true, 0)
+        that selection, hasOption("server", server.id, false, 1)
+        that selection, hasOption("receiver", receiver.id, false, 2)
     }
 
     void "receiving player selection element lists players"() {
@@ -110,8 +111,9 @@ class GameCreateSpec extends HtmlUnitViewSpec {
         def selection = renderViewWithModel(model: modelWithTemplateValues, xpath: "//select[@name='${GAME_RECEIVINGPLAYER_SELECT}']")
 
         then: 'Has expected players as selections'
-        that selection, hasOption("server",server.id, false, 0);
-        that selection, hasOption("receiver", receiver.id, false,  1);
+        that selection, hasOption("-- Choose --", "", true, 0)
+        that selection, hasOption("server",server.id, false, 1);
+        that selection, hasOption("receiver", receiver.id, false,  2);
     }
 
     void "servingPlayer input field for new player"() {
