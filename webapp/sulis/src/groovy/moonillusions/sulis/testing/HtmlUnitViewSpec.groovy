@@ -24,6 +24,9 @@ class HtmlUnitViewSpec extends Specification {
         getElement("//input[@name='$name']", html)
     }
 
+    def getSelect(name, html) {
+        getElement("//select[@name='$name']", html)
+    }
 
     def renderViewWithModel(arguments = [:]) {
         def view = arguments.view ?: defaultName()
