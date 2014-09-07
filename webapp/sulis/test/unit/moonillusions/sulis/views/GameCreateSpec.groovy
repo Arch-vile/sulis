@@ -76,8 +76,6 @@ class GameCreateSpec extends HtmlUnitViewSpec {
         ];
     }
 
-    // TODO: test on actual UI to insert nonvalid date
-
     void "Command binded values used on render"() {
         when: 'Render'
         def output = renderViewWithModel(model: modelWithInsertedValues)
