@@ -15,13 +15,12 @@
 		optionValue="name"
 		value="${fieldValue(bean: createGameCommand, field: 'game.servingPlayer.id')}"
 		noSelection="['':'-- Choose --']"/>
-	<br/>
 	or new  one:  
 		
 	<g:textField 
 		name="newServingPlayer"
 		value="${fieldValue(bean: createGameCommand, field: 'newServingPlayer')}"/>
-
+	<br/>
 	<g:select 
 		name="game.receivingPlayer" 
 		from="${players}" 
@@ -30,7 +29,6 @@
 		value="${fieldValue(bean: createGameCommand, field: 'game.receivingPlayer.id')}"
 		noSelection="['':'-- Choose --']"/>
 		
-	<br/>
 	or new  one
 	<g:textField 
 		name="${prop(of(CreateGameCommand.class).newReceivingPlayer) }"
