@@ -75,6 +75,8 @@ grails.hibernate.cache.queries = false
 
 grails.gorm.failOnError = false
 
+grails.databinding.dateFormats = ["dd.MM.yyyy"]
+
 environments {
     development {
         grails.logging.jul.usebridge = true

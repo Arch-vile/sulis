@@ -1,5 +1,5 @@
 import moonillusions.sulis.domain.Player
 
 build {
-	player1(Player)
+	//player1(Player)
   }
