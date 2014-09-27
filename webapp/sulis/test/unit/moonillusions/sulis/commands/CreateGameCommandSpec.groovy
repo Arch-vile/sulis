@@ -28,8 +28,10 @@ class CreateGameCommandSpec extends Specification {
         when:
         CreateGameCommand command = new CreateGameCommand()
         controller.bindData(command, params)
+        command.validate()
 
         then:
+        !command.hasErrors()
         command.newServingPlayer == "John"
         command.newReceivingPlayer == "Jane"
         command.date == new LocalDate(2014,5,12)
