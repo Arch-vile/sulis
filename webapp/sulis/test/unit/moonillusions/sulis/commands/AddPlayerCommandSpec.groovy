@@ -4,6 +4,8 @@ import static moonillusions.grails.testing.matchers.FieldErrors.fieldErrors
 import static moonillusions.grails.testing.matchers.FieldErrors.noFieldErrors
 import grails.test.mixin.*
 import moonillusions.sulis.controllers.GameController
+import moonillusions.sulis.domain.Player
+import moonillusions.sulis.service.PlayerService
 import spock.lang.Specification
 
 @TestFor(GameController)
@@ -13,6 +15,9 @@ class AddPlayerCommandSpec extends Specification {
 
     def setup() {
         validCommand = new AddPlayerCommand(name: "John")
+        PlayerService playerService = Mock(PlayerService)
+        playerService.get("Already there") >> { new Player() }
+        validCommand.playerService = playerService
     }
 
     void "request parameter binding"() {
@@ -23,6 +28,7 @@ class AddPlayerCommandSpec extends Specification {
 
         when:
         AddPlayerCommand command = new AddPlayerCommand()
+        command.playerService = Mock(PlayerService)
         controller.bindData(command, params)
         command.validate()
 
@@ -35,9 +41,10 @@ class AddPlayerCommandSpec extends Specification {
         when:
         validCommand.name = "abc"
         validCommand.validate()
+        validCommand.errors.each({println it})
 
         then:
-        !command.hasErrors()
+        !validCommand.hasErrors()
         assertThat(validCommand, noFieldErrors())
     }
 
@@ -47,7 +54,7 @@ class AddPlayerCommandSpec extends Specification {
         validCommand.validate()
 
         then:
-        !command.hasErrors()
+        !validCommand.hasErrors()
         assertThat(validCommand, noFieldErrors())
     }
 
@@ -76,5 +83,15 @@ class AddPlayerCommandSpec extends Specification {
 
         then:
         assertThat(validCommand, fieldErrors(name: "nullable"));
+    }
+
+    void "fail if adding already existing player" () {
+
+        when:
+        validCommand.name = "Already there"
+        validCommand.validate()
+
+        then:
+        assertThat(validCommand, fieldErrors(name: "alreadyExists"));
     }
 }
