@@ -2,8 +2,6 @@ package moonillusions.sulis.commands
 
 import grails.validation.Validateable
 
-import org.joda.time.LocalDate
-
 @Validateable
 class CreateGameCommand {
 
@@ -15,7 +13,12 @@ class CreateGameCommand {
     Long servingPlayerId
     Long receivingPlayerId
 
-    def getDate() {
-        return new LocalDate(date)
+    static constraints = {
+        newServingPlayer size: 3..20, nullable: true
+        newReceivingPlayer size: 3..20, nullable: true
+        servingPlayerPoints range: 0..25
+        receivingPlayerPoints range: 0..25
+        servingPlayerId nullable: true
+        receivingPlayerId nullable: true
     }
 }
