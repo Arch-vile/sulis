@@ -16,8 +16,6 @@ class CreateGameCommandSpec extends Specification {
 
     def setup() {
         validCommand = new CreateGameCommand(
-                newServingPlayer: "John",
-                newReceivingPlayer: "Jane",
                 date: new LocalDate(2015,10,10).toDate(),
                 servingPlayerPoints: 21,
                 receivingPlayerPoints:10,
@@ -30,8 +28,6 @@ class CreateGameCommandSpec extends Specification {
 
         setup:
         def params = [:]
-        params['newServingPlayer']= "John"
-        params['newReceivingPlayer'] = "Jane"
         params['date'] = "12.5.2014"
         params['servingPlayerPoints'] = 10
         params['receivingPlayerPoints'] = 21
@@ -45,8 +41,6 @@ class CreateGameCommandSpec extends Specification {
 
         then:
         !command.hasErrors()
-        command.newServingPlayer == "John"
-        command.newReceivingPlayer == "Jane"
         command.date == (new LocalDate(2014,5,12)).toDate()
         command.servingPlayerPoints == 10
         command.receivingPlayerPoints == 21
@@ -54,56 +48,6 @@ class CreateGameCommandSpec extends Specification {
         command.receivingPlayerId == 100
     }
 
-    void "minimum size allowed for new player names"() {
-        when:
-        validCommand.newServingPlayer = "abc"
-        validCommand.newReceivingPlayer = "def"
-        validCommand.validate()
-
-        then:
-        assertThat(validCommand, noFieldErrors())
-    }
-
-    void "maximum size allowed for new player names"() {
-        when:
-        validCommand.newServingPlayer = "12345678901234567890"
-        validCommand.newReceivingPlayer = "12345678901234567890"
-        validCommand.validate()
-
-        then:
-        assertThat(validCommand, noFieldErrors())
-    }
-
-
-    void "minimum size constraints for new player names"() {
-        when:
-        validCommand.newServingPlayer = "ab"
-        validCommand.newReceivingPlayer = "cd"
-        validCommand.validate()
-
-        then:
-        assertThat(validCommand, fieldErrors(newServingPlayer: "size.toosmall", newReceivingPlayer: "size.toosmall"));
-    }
-
-    void "maximum size constraints for new player names"() {
-        when:
-        validCommand.newServingPlayer = validCommand.newServingPlayer = "12345678901234567890a"
-        validCommand.newReceivingPlayer = validCommand.newServingPlayer = "12345678901234567890b"
-        validCommand.validate()
-
-        then:
-        assertThat(validCommand, fieldErrors(newServingPlayer: "size.toobig", newReceivingPlayer: "size.toobig"));
-    }
-
-    void "null allowed for new player names"() {
-        when:
-        validCommand.newServingPlayer = null
-        validCommand.newReceivingPlayer = null
-        validCommand.validate()
-
-        then:
-        assertThat(validCommand, noFieldErrors())
-    }
 
     void "not null constraint for date" () {
         when:
