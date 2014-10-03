@@ -94,4 +94,10 @@ class AddPlayerCommandSpec extends Specification {
         then:
         assertThat(validCommand, fieldErrors(name: "alreadyExists"));
     }
+
+    void "get player to add"() {
+
+        expect:
+        validCommand.getPlayer().name == "John"
+    }
 }
