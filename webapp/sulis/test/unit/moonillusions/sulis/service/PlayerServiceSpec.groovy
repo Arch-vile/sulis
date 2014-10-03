@@ -56,7 +56,7 @@ class PlayerServiceSpec extends spock.lang.Specification {
     void "create player"()  {
 
         when:
-        def player = service.create("some new name")
+        def player = service.create(new Player(name: "some new name"))
 
         then:
         player.name == "some new name"
