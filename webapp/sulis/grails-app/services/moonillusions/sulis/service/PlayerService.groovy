@@ -11,4 +11,9 @@ class PlayerService {
     def get(String name) {
         Player.findByName(name)
     }
+
+    def create(String name) {
+        Player player = new Player(name: name)
+        player.save()
+    }
 }

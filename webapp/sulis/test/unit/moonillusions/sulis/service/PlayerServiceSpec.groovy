@@ -40,4 +40,26 @@ class PlayerServiceSpec extends spock.lang.Specification {
         then:
         players containsInAnyOrder(player2, player1)
     }
+
+    void "get player by name"() {
+
+        setup:
+        def player1 = Player.build(name: "Some one").save()
+
+        when:
+        def player = service.get("Some one")
+
+        then:
+        player.name == "Some one"
+    }
+
+    void "create player"()  {
+
+        when:
+        def player = service.create("some new name")
+
+        then:
+        player.name == "some new name"
+        Player.findByName("some new name") != null
+    }
 }
