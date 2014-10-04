@@ -19,7 +19,7 @@ import static spock.util.matcher.HamcrestSupport.that
 import grails.test.mixin.*
 import grails.test.mixin.domain.DomainClassUnitTestMixin
 import grails.test.mixin.web.GroovyPageUnitTestMixin
-import moonillusions.sulis.controllers.CreateGameCommand
+import moonillusions.sulis.commands.CreateGameCommand;
 import moonillusions.sulis.domain.Game
 import moonillusions.sulis.domain.Player
 import moonillusions.sulis.testing.HtmlUnitViewSpec

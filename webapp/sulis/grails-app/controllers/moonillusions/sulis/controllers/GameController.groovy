@@ -1,5 +1,6 @@
 package moonillusions.sulis.controllers
 
+import moonillusions.sulis.commands.CreateGameCommand;
 import moonillusions.sulis.domain.Game
 import moonillusions.sulis.domain.Player
 import moonillusions.sulis.service.GameService

@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder
 import static org.hamcrest.Matchers.equalTo
 import static spock.util.matcher.HamcrestSupport.that
 import grails.test.mixin.TestFor
+import moonillusions.sulis.commands.CreateGameCommand;
 import moonillusions.sulis.domain.Game
 import moonillusions.sulis.domain.Player
 import moonillusions.sulis.service.GameService
