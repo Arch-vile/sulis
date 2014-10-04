@@ -14,7 +14,8 @@ class CreateGameCommand {
     static constraints = {
         servingPlayerPoints range: 0..25
         receivingPlayerPoints range: 0..25
-        servingPlayerId nullable: true
-        receivingPlayerId nullable: true
+        receivingPlayerId validator: { val, obj ->
+            if(val == obj.servingPlayerId) return "bothSame"
+        }
     }
 }

@@ -70,6 +70,18 @@ class CreateGameCommandSpec extends Specification {
                 servingPlayerPoints: "nullable"));
     }
 
+    void "not null constraints for players"() {
+        when:
+        validCommand.servingPlayerId = null
+        validCommand.receivingPlayerId = null
+        validCommand.validate()
+
+        then:
+        assertThat(validCommand, fieldErrors(
+                servingPlayerId: "nullable",
+                receivingPlayerId: "nullable"));
+    }
+
     void "minimum allowed for points"() {
         when:
         validCommand.receivingPlayerPoints = 0
@@ -114,13 +126,13 @@ class CreateGameCommandSpec extends Specification {
                 servingPlayerPoints: "range.toobig"));
     }
 
-    void "null allowed for player ids"() {
+    void "different serving and receiving player"() {
         when:
-        validCommand.servingPlayerId = null
-        validCommand.receivingPlayerId = null
+        validCommand.servingPlayerId = 1
+        validCommand.receivingPlayerId = 1
         validCommand.validate()
 
         then:
-        assertThat(validCommand, noFieldErrors())
+        assertThat(validCommand, fieldErrors(receivingPlayerId: "bothSame"))
     }
 }
