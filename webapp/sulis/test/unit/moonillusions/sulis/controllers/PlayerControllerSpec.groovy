@@ -19,11 +19,11 @@ class PlayerControllerSpec extends Specification {
 
     PlayerService playerService = Mock(PlayerService)
 
-    AddPlayerCommand command
+    AddPlayerCommand validCommand
 
     def setup() {
         controller.playerService = playerService
-        command =  new AddPlayerCommand(name: "new name")
+        validCommand =  new AddPlayerCommand(name: "new name")
         playerService.create(_) >> { it }
     }
 
@@ -43,7 +43,7 @@ class PlayerControllerSpec extends Specification {
     void "add action adds new player"() {
 
         when:
-        controller.add(command)
+        controller.add(validCommand)
 
         then:
         1 * playerService.create({ player ->
@@ -62,13 +62,16 @@ class PlayerControllerSpec extends Specification {
         model == command
     }
 
-    void "add action redirects to game page on success"() {
+    void "add action redirects to game controller on success"() {
 
         when:
-        controller.add(command)
+        controller.add(validCommand)
 
-        then:
-        view == "/game/"
+        then: "Game controller is the default controller thus root"
+        response.redirectUrl == "/"
         model.isEmpty()
+
+        and: "Set success message"
+        flash.message == "player.message.created.ok"
     }
 }

@@ -14,7 +14,8 @@ class PlayerController {
 
     def add(AddPlayerCommand command) {
         if(playerService.create(command.getPlayer())) {
-            render(view: "/game/")
+            flash.message = "player.message.created.ok"
+            redirect(controller: "game")
         } else {
             command
         }
