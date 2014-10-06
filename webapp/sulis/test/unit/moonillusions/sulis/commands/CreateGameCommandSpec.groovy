@@ -135,4 +135,13 @@ class CreateGameCommandSpec extends Specification {
         then:
         assertThat(validCommand, fieldErrors(receivingPlayerId: "bothSame"))
     }
+
+    void "date defaults to current date"() {
+
+        when:
+        CreateGameCommand command = new CreateGameCommand()
+
+        then:
+        LocalDate.fromDateFields(command.date) == new LocalDate()
+    }
 }

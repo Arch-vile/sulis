@@ -5,7 +5,7 @@ import grails.validation.Validateable
 @Validateable
 class CreateGameCommand {
 
-    Date date
+    Date date = new Date()
     Integer servingPlayerPoints
     Integer receivingPlayerPoints
     Long servingPlayerId
