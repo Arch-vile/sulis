@@ -1,57 +1,42 @@
-<%@ page import="static com.moonillusions.propertynavigation.PropertyNavigation.to" %>
-<%@ page import="static com.moonillusions.propertynavigation.PropertyNavigation.of" %>
-<%@ page import="static com.moonillusions.propertynavigation.PropertyNavigation.prop" %>
-<%@ page import="moonillusions.sulis.controllers.CreateGameCommand" %>
-
-<g:renderErrors as="list" bean="${command?.game}"/>
+<g:renderErrors as="list" bean="${createGameCommand}"/>
 
 <g:form action="create">
 
 
 	<g:select
-		name="game.servingPlayer"
+		name="servingPlayerId"
 		from="${players}"
 		optionKey="id"
 		optionValue="name"
-		value="${fieldValue(bean: createGameCommand, field: 'game.servingPlayer.id')}"
+		value="${fieldValue(bean: createGameCommand, field: 'servingPlayerId')}"
 		noSelection="['':'-- Choose --']"/>
-	or new  one:  
-		
-	<g:textField 
-		name="newServingPlayer"
-		value="${fieldValue(bean: createGameCommand, field: 'newServingPlayer')}"/>
 	<br/>
 	<g:select 
-		name="game.receivingPlayer" 
+		name="receivingPlayerId" 
 		from="${players}" 
 		optionKey="id" 
 		optionValue="name"
-		value="${fieldValue(bean: createGameCommand, field: 'game.receivingPlayer.id')}"
+		value="${fieldValue(bean: createGameCommand, field: 'receivingPlayerId')}"
 		noSelection="['':'-- Choose --']"/>
 		
-	or new  one
-	<g:textField 
-		name="${prop(of(CreateGameCommand.class).newReceivingPlayer) }"
-		value="${fieldValue(bean: createGameCommand, field: 'newReceivingPlayer')}"/>
-	
 	<br/>
 	receiving score: 
 	<g:select 
-		name="game.servingPlayerPoints"
+		name="servingPlayerPoints"
 		from="${[*21..0, *22..25]}" 
-		value="${fieldValue(bean: createGameCommand, field: 'game.servingPlayerPoints')}"/>
+		value="${fieldValue(bean: createGameCommand, field: 'servingPlayerPoints')}"/>
 	<br/>
 	serving score: 
 	<g:select 
-		name="game.receivingPlayerPoints"
+		name="receivingPlayerPoints"
 		from="${[*21..0, *22..25]}"
-		value="${fieldValue(bean: createGameCommand, field: 'game.receivingPlayerPoints')}"/>
+		value="${fieldValue(bean: createGameCommand, field: 'receivingPlayerPoints')}"/>
 
 	<br/>
 	date: 
 	<g:textField 
-		name="${prop(of(CreateGameCommand.class).game.date) }" 
-		value="${formatDate(format:'d.M.yyyy',date: createGameCommand.game.date.toDate())}"/>
+		name="date" 
+		value="${formatDate(format:'d.M.yyyy',date: createGameCommand.date)}"/>
 
 	<g:submitButton name="create" />
 

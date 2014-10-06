@@ -19,8 +19,7 @@ import static spock.util.matcher.HamcrestSupport.that
 import grails.test.mixin.*
 import grails.test.mixin.domain.DomainClassUnitTestMixin
 import grails.test.mixin.web.GroovyPageUnitTestMixin
-import moonillusions.sulis.commands.CreateGameCommand;
-import moonillusions.sulis.domain.Game
+import moonillusions.sulis.commands.CreateGameCommand
 import moonillusions.sulis.domain.Player
 import moonillusions.sulis.testing.HtmlUnitViewSpec
 
@@ -29,16 +28,14 @@ import org.joda.time.LocalDate
 @TestMixin([GroovyPageUnitTestMixin,DomainClassUnitTestMixin])
 class GameCreateSpec extends HtmlUnitViewSpec {
 
-    private static final GAME_RECEIVINGPLAYER_SELECT = prop(of(CreateGameCommand.class).game.receivingPlayer)
-    private static final GAME_SERVINGPLAYER_SELECT =   prop(of(CreateGameCommand.class).game.servingPlayer)
-    private static final NEWSERVINGPLAYER_FIELD = prop(of(CreateGameCommand.class).newServingPlayer)
-    private static final NEWRECEIVINGPLAYER_FIELD = prop(of(CreateGameCommand.class).newReceivingPlayer)
-    private static final GAME_SERVINGPLAYERPOINTS_SELECT = prop(of(CreateGameCommand.class).game.servingPlayerPoints)
-    private static final GAME_RECEIVINGPLAYERPOINTS_SELECT = prop(of(CreateGameCommand.class).game.receivingPlayerPoints)
-    private static final GAME_DATE = prop(of(CreateGameCommand.class).game.date)
+    private static final RECEIVINGPLAYER_HTML_SELECT = prop(of(CreateGameCommand.class).receivingPlayerId)
+    private static final SERVINGPLAYER_HTML_SELECT =   prop(of(CreateGameCommand.class).servingPlayerId)
+    private static final SERVINGPLAYERPOINTS_HTML_SELECT = prop(of(CreateGameCommand.class).servingPlayerPoints)
+    private static final RECEIVINGPLAYERPOINTS_HTML_SELECT = prop(of(CreateGameCommand.class).receivingPlayerPoints)
+    private static final DATE_HTML_INPUT = prop(of(CreateGameCommand.class).date)
 
-    def modelWithInsertedValues
-    def modelWithTemplateValues
+    def populatedModel
+    def freshModel
     def server
     def receiver
 
@@ -48,54 +45,48 @@ class GameCreateSpec extends HtmlUnitViewSpec {
         server = (new Player(name: "server")).save()
         receiver = (new Player(name: "receiver")).save()
 
-        modelWithInsertedValues = [
+        populatedModel = [
             players: [
                 server,
                 receiver
             ],
-            createGameCommand: new CreateGameCommand(
-            game: new Game(
-            date: new LocalDate(2014,6,25),
-            servingPlayer: server,
-            receivingPlayer: receiver,
+            createGameCommand:
+            new CreateGameCommand(
+            date: (new LocalDate(2014,6,25)).toDate(),
+            servingPlayerId: server.id,
+            receivingPlayerId: receiver.id,
             servingPlayerPoints: 24,
-            receivingPlayerPoints: 12),
-            newServingPlayer: "John",
-            newReceivingPlayer: "Mary"
-            )
+            receivingPlayerPoints: 12)
+
         ];
 
-        modelWithTemplateValues = [
+        freshModel = [
             players: [
                 server,
                 receiver
             ],
-            createGameCommand: new CreateGameCommand(
-            game: new Game(
-            date: new LocalDate(2015,6,25)))
+            createGameCommand:
+            new CreateGameCommand(date: (new LocalDate(2015,6,25)).toDate())
         ];
     }
 
-    void "Command binded values used on render"() {
+    void "Binded values used on render"() {
         when: 'Render'
-        def output = renderViewWithModel(model: modelWithInsertedValues)
+        def output = renderViewWithModel(model: populatedModel)
 
         then: 'Binded value shown'
-        that getInput(NEWSERVINGPLAYER_FIELD,output), hasAttribute("value","John")
-        that getInput(NEWRECEIVINGPLAYER_FIELD,output), hasAttribute("value","Mary")
-        that getSelect(GAME_SERVINGPLAYER_SELECT,output), hasOption("server",server.id,true,1)
-        that getSelect(GAME_RECEIVINGPLAYER_SELECT,output), hasOption("receiver",receiver.id,true,2)
-        that getSelect(GAME_SERVINGPLAYERPOINTS_SELECT, output), hasOption("24",24,true,24)
-        that getSelect(GAME_RECEIVINGPLAYERPOINTS_SELECT, output), hasOption("12",12,true,9)
-        that getInput(GAME_DATE, output), hasAttribute("value","25.6.2014")
+        that getSelect(SERVINGPLAYER_HTML_SELECT,output), hasOption("server",server.id,true,1)
+        that getSelect(RECEIVINGPLAYER_HTML_SELECT,output), hasOption("receiver",receiver.id,true,2)
+        that getSelect(SERVINGPLAYERPOINTS_HTML_SELECT, output), hasOption("24",24,true,24)
+        that getSelect(RECEIVINGPLAYERPOINTS_HTML_SELECT, output), hasOption("12",12,true,9)
+        that getInput(DATE_HTML_INPUT, output), hasAttribute("value","25.6.2014")
     }
 
 
     void "servingPlayer selection element lists players"() {
 
         when: 'Get serving player select element'
-        println GAME_SERVINGPLAYER_SELECT
-        def selection = renderViewWithModel(model: modelWithTemplateValues, xpath: "//select[@name='${GAME_SERVINGPLAYER_SELECT}']")
+        def selection = renderViewWithModel(model: freshModel, xpath: "//select[@name='${SERVINGPLAYER_HTML_SELECT}']")
 
         then: 'Has expected players as selections'
         that selection, hasOption("-- Choose --", "", true, 0)
@@ -106,7 +97,7 @@ class GameCreateSpec extends HtmlUnitViewSpec {
     void "receiving player selection element lists players"() {
 
         when: 'Get receiving player select element'
-        def selection = renderViewWithModel(model: modelWithTemplateValues, xpath: "//select[@name='${GAME_RECEIVINGPLAYER_SELECT}']")
+        def selection = renderViewWithModel(model: freshModel, xpath: "//select[@name='${RECEIVINGPLAYER_HTML_SELECT}']")
 
         then: 'Has expected players as selections'
         that selection, hasOption("-- Choose --", "", true, 0)
@@ -114,28 +105,10 @@ class GameCreateSpec extends HtmlUnitViewSpec {
         that selection, hasOption("receiver", receiver.id, false,  2);
     }
 
-    void "servingPlayer input field for new player"() {
-
-        when: 'Get input for the new serving player'
-        def input = renderViewWithModel(model: modelWithTemplateValues, xpath: "//input[@name='${NEWSERVINGPLAYER_FIELD}']")
-
-        then: 'Has no default value'
-        that input, hasAttribute("value","")
-    }
-
-    void "receivingPlayer input field for new player"() {
-
-        when: 'Get input for the new receiving player'
-        def input = renderViewWithModel(model: modelWithTemplateValues, xpath: "//input[@name='${NEWRECEIVINGPLAYER_FIELD}']")
-
-        then: 'Has no default value'
-        that input, hasAttribute("value","")
-    }
-
     void "serving player points dropdown"() {
 
         when: 'Get serving player points selection'
-        def selection = renderViewWithModel(model: modelWithTemplateValues, xpath: "//select[@name='${GAME_SERVINGPLAYERPOINTS_SELECT}']")
+        def selection = renderViewWithModel(model: freshModel, xpath: "//select[@name='${SERVINGPLAYERPOINTS_HTML_SELECT}']")
 
         then: 'Has numbers from 21-0,22,23,24,25'
         that selection, hasOptions("21","20","19","18","17","16","15","14","13","12","11","10","9","8","7","6","5","4","3","2","1","0","22","23","24","25")
@@ -144,7 +117,7 @@ class GameCreateSpec extends HtmlUnitViewSpec {
     void "receiving player points dropdown"() {
 
         when: 'Get receiving player points selection'
-        def selection = renderViewWithModel(model: modelWithTemplateValues, xpath: "//select[@name='${GAME_RECEIVINGPLAYERPOINTS_SELECT}']")
+        def selection = renderViewWithModel(model: freshModel, xpath: "//select[@name='${RECEIVINGPLAYERPOINTS_HTML_SELECT}']")
 
         then: 'Has numbers from 21-0,22,23,24,25'
         that selection, hasOptions("21","20","19","18","17","16","15","14","13","12","11","10","9","8","7","6","5","4","3","2","1","0","22","23","24","25")
@@ -153,7 +126,7 @@ class GameCreateSpec extends HtmlUnitViewSpec {
     void "submit to create action on default controller" () {
 
         when: 'Get the form'
-        def form = renderViewWithModel(model: modelWithInsertedValues, xpath: "//form[//input[@type='submit' and @value='create']]")
+        def form = renderViewWithModel(model: populatedModel, xpath: "//form[//input[@type='submit' and @value='create']]")
 
         then: 'action mapped to the create action on default controller'
         that form, hasAttribute("action","/test/create")
