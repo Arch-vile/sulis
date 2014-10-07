@@ -3,13 +3,14 @@ package moonillusions.sulis.controllers
 import static org.hamcrest.Matchers.containsInAnyOrder
 import static org.hamcrest.Matchers.equalTo
 import static spock.util.matcher.HamcrestSupport.that
-import grails.test.mixin.TestFor
-import moonillusions.sulis.commands.CreateGameCommand;
+import grails.test.mixin.*
+import moonillusions.sulis.commands.CreateGameCommand
 import moonillusions.sulis.domain.Game
 import moonillusions.sulis.domain.Player
 import moonillusions.sulis.service.GameService
 import moonillusions.sulis.service.PlayerService
 
+import org.codehaus.groovy.grails.exceptions.GrailsRuntimeException
 import org.codehaus.groovy.grails.plugins.testing.GrailsMockHttpServletResponse
 import org.joda.time.DateTimeUtils
 import org.joda.time.LocalDate
@@ -24,35 +25,46 @@ class GameControllerSpec extends Specification {
 
     PlayerService playerService = Mock(PlayerService)
     GameService gameService = Mock(GameService)
+
     LocalDate currentDate
+    def listOfPlayers = [new Player()]
+    CreateGameCommand mockedValidCommand
+    Game gameFromComand = new Game()
 
     def setup() {
         controller.playerService = playerService
         controller.gameService = gameService
         currentDate = new LocalDate().minusDays(10);
         DateTimeUtils.setCurrentMillisFixed(currentDate.getLocalMillis())
+        playerService.list() >> listOfPlayers
+
+        mockedValidCommand = Mock(CreateGameCommand)
+        mockedValidCommand.hasErrors() >> false
+        mockedValidCommand.getGame() >> gameFromComand
     }
 
     def cleanup() {
     }
 
+    void "afterInterceptor is applied to all actions"() {
+        expect: 'Applied to all controller methods'
+        controller.afterInterceptor.only == null
+        controller.afterInterceptor.except == null
+    }
 
-    void "After interceptor is applied to all actions and populates model with players list"() {
 
-        setup: 'Mock playerService player listing'
-        def listOfPlayers = [new Player()]
-        playerService.list() >> listOfPlayers
+    void "afterInterceptor populates player list to the model"() {
 
-        when: 'Interceptor is applied to actions models'
+        when: 'Interceptor is applied'
         def model = [name: "some"]
-        controller.afterInterceptor(model)
+        controller.afterInterceptor.action.doCall(model)
 
         then: 'Player list is populated'
         model.players == listOfPlayers
         model.name == "some"
     }
 
-    void "Index action renders the create view with prepopulated command"() {
+    void "Index action renders the create view and attach command to model"() {
 
         when:
         controller.index()
@@ -60,62 +72,41 @@ class GameControllerSpec extends Specification {
         then: 'Create view is shown'
         view == '/game/create'
 
-        and: 'Command has the current data populated'
-        model.command.game.date == currentDate
+        and: 'CreateGameCommand attached to model'
+        model.command instanceof CreateGameCommand
     }
 
 
-    void "Create action creates new game"() {
+    void "Game from the command is created by service"() {
 
-        setup:
-        def game = new Game()
-        def commandObject = new CreateGameCommand(game: game)
-
-        when: 'create action is called'
-        controller.create(commandObject)
-
-        then: 'Service is called with the game'
-        1 * gameService.create(game)
-    }
-
-    void "If given, the new serving player is used for new game"() {
-
-        given: 'Command with new player'
-        def command = new CreateGameCommand(newServingPlayer: "new player", game: new Game())
-
-        when: 'Create action is called'
-        controller.create(command)
+        when:
+        controller.create(mockedValidCommand)
 
         then:
-        1 * gameService.create({ Game game ->
-            assert game.servingPlayer.name == "new player"
-            true
-        })
+        1 * gameService.create(gameFromComand) >> gameFromComand
     }
 
-    void "If given, the new receiving player is used for new game"() {
+    void "On invalid command, create action redisplays create view"() {
 
-        given: 'Command with new player'
-        def command = new CreateGameCommand(newReceivingPlayer: "new player", game: new Game())
+        setup: 'Mock the invalid command'
+        def command = Mock(CreateGameCommand)
+        command.hasErrors() >> true
 
-        when: 'Create action is called'
-        controller.create(command)
+        when: 'Called with invalid command'
+        def model = controller.create(command)
 
-        then:
-        1 * gameService.create({ Game game ->
-            assert game.receivingPlayer.name == "new player"
-            true
-        })
+        then: 'Create view redisplayed'
+        model.command == command
     }
 
     void "If game created, the show view is shown"() {
 
-        setup: 'Service creates new game'
+        setup: 'Service successfully creates new game'
         Game game = new Game()
         gameService.create(_) >> game
 
         when:
-        controller.create(new CreateGameCommand())
+        controller.create(mockedValidCommand)
 
         then: 'Correct view is shown'
         view == '/game/show'
@@ -128,19 +119,15 @@ class GameControllerSpec extends Specification {
     }
 
 
-    void "If errors on service, the same view is shown with same command" () {
+    void "If errors on service, throw error" () {
 
         setup: 'Service call fails to create game'
         gameService.create(_) >> null
 
         when: 'Create new game'
-        def command = new CreateGameCommand()
-        def model = controller.create(command)
+        def model = controller.create(mockedValidCommand)
 
-        then: 'the failed game is passed forward'
-        model.command == command
-
-        and: 'create view is shown again per conventions'
-        view == null
+        then:
+        thrown(GrailsRuntimeException)
     }
 }
