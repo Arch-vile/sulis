@@ -4,25 +4,43 @@ import static moonillusions.grails.testing.matchers.FieldErrors.fieldErrors
 import static moonillusions.grails.testing.matchers.FieldErrors.noFieldErrors
 import grails.test.mixin.*
 import moonillusions.sulis.controllers.GameController
+import moonillusions.sulis.domain.Player
 
 import org.joda.time.LocalDate
 
 import spock.lang.Specification
 
+@grails.test.mixin.Mock(Player)
 @TestFor(GameController)
 class CreateGameCommandSpec extends Specification {
 
     CreateGameCommand validCommand
+    Player servingPlayer
+    Player receivingPlayer
+
 
     def setup() {
+
+        servingPlayer = (new Player(name: "John")).save()
+        receivingPlayer = (new Player(name: "Jane")).save()
+
         validCommand = new CreateGameCommand(
                 date: new LocalDate(2015,10,10).toDate(),
                 servingPlayerPoints: 21,
                 receivingPlayerPoints:10,
-                servingPlayerId: 1,
-                receivingPlayerId: 2)
+                servingPlayerId: servingPlayer.id,
+                receivingPlayerId: receivingPlayer.id)
     }
 
+    void "construct the game to be created"() {
+
+        expect:
+        validCommand.game.date == new LocalDate(2015,10,10)
+        validCommand.game.servingPlayer.id == servingPlayer.id
+        validCommand.game.receivingPlayer.id == receivingPlayer.id
+        validCommand.game.servingPlayerPoints == 21
+        validCommand.game.receivingPlayerPoints == 10
+    }
 
     void "request parameter binding"() {
 
