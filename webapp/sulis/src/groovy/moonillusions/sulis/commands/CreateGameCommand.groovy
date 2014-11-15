@@ -22,7 +22,11 @@ class CreateGameCommand {
     }
 
     def getGame() {
-        return new Game(date: date, servingPlayerPoints: servingPlayerPoints, receivingPlayerPoints: receivingPlayerPoints,
-        servingPlayer: Player.get(servingPlayerId), receivingPlayer: Player.get(receivingPlayerId))
+        return new Game( //
+                date: date, //
+                servingPlayerPoints: servingPlayerPoints, //
+                receivingPlayerPoints: receivingPlayerPoints,
+                servingPlayer: Player.get(servingPlayerId), //
+                receivingPlayer: Player.get(receivingPlayerId))
     }
 }

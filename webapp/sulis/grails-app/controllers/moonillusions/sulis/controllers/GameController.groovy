@@ -24,14 +24,11 @@ class GameController {
 
     def create(CreateGameCommand command) {
 
-        println "create" + command.hasErrors()
         if(command.hasErrors()) {
             return [command: command]
         }
 
-        println command.game
         Game newGame = gameService.create(command.game)
-        println newGame
         if(newGame) {
             flash.message = message(code: 'gameController.message.game.created')
             render view: 'show', model: [game: newGame]

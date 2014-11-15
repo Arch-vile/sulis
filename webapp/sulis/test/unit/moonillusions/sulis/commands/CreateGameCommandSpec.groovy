@@ -2,6 +2,7 @@ package moonillusions.sulis.commands
 
 import static moonillusions.grails.testing.matchers.FieldErrors.fieldErrors
 import static moonillusions.grails.testing.matchers.FieldErrors.noFieldErrors
+import static spock.util.matcher.HamcrestSupport.that
 import grails.test.mixin.*
 import moonillusions.sulis.controllers.GameController
 import moonillusions.sulis.domain.Player
@@ -73,7 +74,7 @@ class CreateGameCommandSpec extends Specification {
         validCommand.validate()
 
         then:
-        assertThat(validCommand, fieldErrors(date: "nullable"));
+        that validCommand, fieldErrors(date: "nullable")
     }
 
     void "not null constraints for points"() {
@@ -83,9 +84,9 @@ class CreateGameCommandSpec extends Specification {
         validCommand.validate()
 
         then:
-        assertThat(validCommand, fieldErrors(
+        that validCommand, fieldErrors(
                 receivingPlayerPoints: "nullable",
-                servingPlayerPoints: "nullable"));
+                servingPlayerPoints: "nullable")
     }
 
     void "not null constraints for players"() {
@@ -95,9 +96,9 @@ class CreateGameCommandSpec extends Specification {
         validCommand.validate()
 
         then:
-        assertThat(validCommand, fieldErrors(
+        that validCommand, fieldErrors(
                 servingPlayerId: "nullable",
-                receivingPlayerId: "nullable"));
+                receivingPlayerId: "nullable")
     }
 
     void "minimum allowed for points"() {
@@ -107,7 +108,7 @@ class CreateGameCommandSpec extends Specification {
         validCommand.validate()
 
         then:
-        assertThat(validCommand, noFieldErrors())
+        that validCommand, noFieldErrors()
     }
 
     void "maximum allowed for points"() {
@@ -117,7 +118,7 @@ class CreateGameCommandSpec extends Specification {
         validCommand.validate()
 
         then:
-        assertThat(validCommand, noFieldErrors())
+        that validCommand, noFieldErrors()
     }
 
     void "minimum size constraints for points"() {
@@ -127,9 +128,9 @@ class CreateGameCommandSpec extends Specification {
         validCommand.validate()
 
         then:
-        assertThat(validCommand, fieldErrors(
+        that validCommand, fieldErrors(
                 receivingPlayerPoints: "range.toosmall",
-                servingPlayerPoints: "range.toosmall"));
+                servingPlayerPoints: "range.toosmall")
     }
 
     void "maximum size constraints for points"() {
@@ -139,9 +140,9 @@ class CreateGameCommandSpec extends Specification {
         validCommand.validate()
 
         then:
-        assertThat(validCommand, fieldErrors(
+        that validCommand, fieldErrors(
                 receivingPlayerPoints: "range.toobig",
-                servingPlayerPoints: "range.toobig"));
+                servingPlayerPoints: "range.toobig")
     }
 
     void "different serving and receiving player"() {
@@ -151,7 +152,7 @@ class CreateGameCommandSpec extends Specification {
         validCommand.validate()
 
         then:
-        assertThat(validCommand, fieldErrors(receivingPlayerId: "bothSame"))
+        that validCommand, fieldErrors(receivingPlayerId: "bothSame")
     }
 
     void "date defaults to current date"() {
