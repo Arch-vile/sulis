@@ -91,6 +91,6 @@ grails.project.dependency.resolution = {
         compile ":build-test-data:2.1.2"
         compile ":fixtures:1.3"
         compile ":joda-time:1.5"
-        test ":fields:1.3"
+        test ":fields:1.4"
     }
 }
