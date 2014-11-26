@@ -26,7 +26,7 @@ class GameControllerSpec extends Specification {
     PlayerService playerService = Mock(PlayerService)
     GameService gameService = Mock(GameService)
 
-    LocalDate currentDate
+    //LocalDate currentDate
     def listOfPlayers = [new Player()]
     CreateGameCommand mockedValidCommand
     Game gameFromComand = new Game()
@@ -34,8 +34,8 @@ class GameControllerSpec extends Specification {
     def setup() {
         controller.playerService = playerService
         controller.gameService = gameService
-        currentDate = new LocalDate().minusDays(10);
-        DateTimeUtils.setCurrentMillisFixed(currentDate.getLocalMillis())
+        //currentDate = new LocalDate().minusDays(30);
+        //DateTimeUtils.setCurrentMillisFixed(currentDate.getLocalMillis())
         playerService.list() >> listOfPlayers
 
         mockedValidCommand = Mock(CreateGameCommand)
