@@ -7,6 +7,7 @@ import moonillusions.sulis.controllers.GameController
 import moonillusions.sulis.domain.Player
 import moonillusions.sulis.service.PlayerService
 import spock.lang.Specification
+import static spock.util.matcher.HamcrestSupport.that
 
 @TestFor(GameController)
 class AddPlayerCommandSpec extends Specification {
@@ -45,7 +46,7 @@ class AddPlayerCommandSpec extends Specification {
 
         then:
         !validCommand.hasErrors()
-        assertThat(validCommand, noFieldErrors())
+		that validCommand, noFieldErrors()
     }
 
     void "maximum size allowed for new player name"() {
@@ -55,7 +56,7 @@ class AddPlayerCommandSpec extends Specification {
 
         then:
         !validCommand.hasErrors()
-        assertThat(validCommand, noFieldErrors())
+        that validCommand, noFieldErrors()
     }
 
     void "minimum size constraints for new player name"() {
@@ -64,7 +65,7 @@ class AddPlayerCommandSpec extends Specification {
         validCommand.validate()
 
         then:
-        assertThat(validCommand, fieldErrors(name: "size.toosmall"));
+        that validCommand, fieldErrors(name: "size.toosmall")
     }
 
     void "maximum size constraints for new player name"() {
@@ -73,7 +74,7 @@ class AddPlayerCommandSpec extends Specification {
         validCommand.validate()
 
         then:
-        assertThat(validCommand, fieldErrors(name: "size.toobig"));
+        that validCommand, fieldErrors(name: "size.toobig")
     }
 
     void "not null constraint for new player name"() {
@@ -82,7 +83,7 @@ class AddPlayerCommandSpec extends Specification {
         validCommand.validate()
 
         then:
-        assertThat(validCommand, fieldErrors(name: "nullable"));
+        that validCommand, fieldErrors(name: "nullable")
     }
 
     void "fail if adding already existing player" () {
@@ -92,7 +93,7 @@ class AddPlayerCommandSpec extends Specification {
         validCommand.validate()
 
         then:
-        assertThat(validCommand, fieldErrors(name: "alreadyExists"));
+        that validCommand, fieldErrors(name: "alreadyExists")
     }
 
     void "get player to add"() {
