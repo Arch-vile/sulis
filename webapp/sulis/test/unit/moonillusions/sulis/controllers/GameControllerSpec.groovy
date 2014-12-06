@@ -60,7 +60,7 @@ class GameControllerSpec extends Specification {
         controller.afterInterceptor.action.doCall(model)
 
         then: 'Player list is populated'
-        model.players == listOfPlayers
+        model[GameController.MODEL_PLAYERS] == listOfPlayers
         model.name == "some"
     }
 
@@ -73,7 +73,7 @@ class GameControllerSpec extends Specification {
         view == '/game/create'
 
         and: 'CreateGameCommand attached to model'
-        model.command instanceof CreateGameCommand
+        model[GameController.MODEL_COMMAND] instanceof CreateGameCommand
     }
 
 
@@ -96,7 +96,7 @@ class GameControllerSpec extends Specification {
         def model = controller.create(command)
 
         then: 'Create view redisplayed'
-        model.command == command
+        model[GameController.MODEL_COMMAND] == command
     }
 
     void "If game created, the show view is shown"() {

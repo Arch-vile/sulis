@@ -9,23 +9,26 @@ import org.codehaus.groovy.grails.exceptions.GrailsRuntimeException
 
 class GameController {
 
+	public static final String MODEL_COMMAND = "command"
+	public static final String MODEL_PLAYERS = "players"
+	
     PlayerService playerService
     GameService gameService
 
     def afterInterceptor = [action: this.&setPlayerList]
 
     private setPlayerList(model) {
-        model.players = playerService.list()
+        model[MODEL_PLAYERS] = playerService.list()
     }
 
     def index() {
-        render view: 'create', model: [command: new CreateGameCommand()]
+        render view: 'create', model: [(MODEL_COMMAND): new CreateGameCommand()]
     }
 
     def create(CreateGameCommand command) {
 
         if(command.hasErrors()) {
-            return [command: command]
+            return [(MODEL_COMMAND): command]
         }
 
         Game newGame = gameService.create(command.game)

@@ -1,4 +1,4 @@
-<g:renderErrors as="list" bean="${createGameCommand}"/>
+<g:renderErrors as="list" bean="${command}"/>
 
 <g:form action="create">
 
@@ -8,7 +8,7 @@
 		from="${players}"
 		optionKey="id"
 		optionValue="name"
-		value="${fieldValue(bean: createGameCommand, field: 'servingPlayerId')}"
+		value="${fieldValue(bean: command, field: 'servingPlayerId')}"
 		noSelection="['':'-- Choose --']"/>
 	<br/>
 	<g:select 
@@ -16,7 +16,7 @@
 		from="${players}" 
 		optionKey="id" 
 		optionValue="name"
-		value="${fieldValue(bean: createGameCommand, field: 'receivingPlayerId')}"
+		value="${fieldValue(bean: command, field: 'receivingPlayerId')}"
 		noSelection="['':'-- Choose --']"/>
 		
 	<br/>
@@ -24,19 +24,19 @@
 	<g:select 
 		name="servingPlayerPoints"
 		from="${[*21..0, *22..25]}" 
-		value="${fieldValue(bean: createGameCommand, field: 'servingPlayerPoints')}"/>
+		value="${fieldValue(bean: command, field: 'servingPlayerPoints')}"/>
 	<br/>
 	serving score: 
 	<g:select 
 		name="receivingPlayerPoints"
 		from="${[*21..0, *22..25]}"
-		value="${fieldValue(bean: createGameCommand, field: 'receivingPlayerPoints')}"/>
+		value="${fieldValue(bean: command, field: 'receivingPlayerPoints')}"/>
 
 	<br/>
 	date: 
 	<g:textField 
 		name="date" 
-		value="${formatDate(format:'d.M.yyyy',date: createGameCommand.date)}"/>
+		value="${formatDate(format:'d.M.yyyy',date: command.date)}"/>
 
 	<g:submitButton name="create" />
 

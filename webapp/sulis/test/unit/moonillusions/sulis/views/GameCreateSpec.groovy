@@ -1,7 +1,3 @@
-
-
-
-
 package moonillusions.sulis.views
 
 import static com.moonillusions.htmlUnitMatchers.matchers.AsText.asText
@@ -20,6 +16,7 @@ import grails.test.mixin.*
 import grails.test.mixin.domain.DomainClassUnitTestMixin
 import grails.test.mixin.web.GroovyPageUnitTestMixin
 import moonillusions.sulis.commands.CreateGameCommand
+import moonillusions.sulis.controllers.GameController;
 import moonillusions.sulis.domain.Player
 import moonillusions.sulis.testing.HtmlUnitViewSpec
 
@@ -46,28 +43,25 @@ class GameCreateSpec extends HtmlUnitViewSpec {
         receiver = (new Player(name: "receiver")).save()
 
         populatedModel = [
-            players: [
+			(GameController.MODEL_COMMAND): 
+				new CreateGameCommand(
+					date: (new LocalDate(2014,6,25)).toDate(),
+					servingPlayerId: server.id,
+					receivingPlayerId: receiver.id,
+					servingPlayerPoints: 24,
+					receivingPlayerPoints: 12),
+			(GameController.MODEL_PLAYERS): [
                 server,
                 receiver
-            ],
-            createGameCommand:
-            new CreateGameCommand(
-            date: (new LocalDate(2014,6,25)).toDate(),
-            servingPlayerId: server.id,
-            receivingPlayerId: receiver.id,
-            servingPlayerPoints: 24,
-            receivingPlayerPoints: 12)
-
-        ];
-
+            ]]
+		
+		
         freshModel = [
-            players: [
-                server,
-                receiver
-            ],
-            createGameCommand:
-            new CreateGameCommand(date: (new LocalDate(2015,6,25)).toDate())
-        ];
+			(GameController.MODEL_COMMAND):
+				new CreateGameCommand(date: (new LocalDate(2015,6,25)).toDate()),
+			(GameController.MODEL_PLAYERS):
+				[server,receiver]
+		]
     }
 
     void "Binded values used on render"() {
