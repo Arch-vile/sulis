@@ -125,4 +125,14 @@ class GameCreateSpec extends HtmlUnitViewSpec {
         then: 'action mapped to the create action on default controller'
         that form, hasAttribute("action","/test/create")
     }
+	
+	
+	void "has links to create new players" () {
+		
+		when:
+		def links = renderViewWithModel(model: freshModel, xpath: "//a[@href='/player']")
+		
+		then:
+		that links.size(), equalTo(2)
+	}
 }

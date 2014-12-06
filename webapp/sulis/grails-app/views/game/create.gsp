@@ -10,6 +10,7 @@
 		optionValue="name"
 		value="${fieldValue(bean: command, field: 'servingPlayerId')}"
 		noSelection="['':'-- Choose --']"/>
+	<g:link controller="player">Add new player</g:link>
 	<br/>
 	<g:select 
 		name="receivingPlayerId" 
@@ -18,7 +19,7 @@
 		optionValue="name"
 		value="${fieldValue(bean: command, field: 'receivingPlayerId')}"
 		noSelection="['':'-- Choose --']"/>
-		
+	<g:link controller="player">Add new player</g:link>
 	<br/>
 	receiving score: 
 	<g:select 

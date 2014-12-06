@@ -16,7 +16,12 @@ class HtmlUnitViewSpec extends Specification {
         StringWebResponse resp = new StringWebResponse(html, new URL("http://localhost"))
         WebClient client = new WebClient()
         HtmlPage page = HTMLParser.parseHtml(resp, client.getCurrentWindow())
-        page.getFirstByXPath(xpath)
+        def elements = page.getByXPath(xpath)
+		if(elements.size() == 1) {
+			return elements.get(0);
+		} else {
+			return elements;
+		}
     }
 
 

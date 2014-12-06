@@ -6,6 +6,8 @@ import moonillusions.sulis.service.PlayerService
 
 class PlayerController {
 
+	public static final String MODEL_COMMAND = "command"
+	
     PlayerService playerService
 
     def index() {
@@ -17,7 +19,7 @@ class PlayerController {
             flash.message = "player.message.created.ok"
             redirect(controller: "game")
         } else {
-            command
+            [(MODEL_COMMAND): command]
         }
     }
 }
