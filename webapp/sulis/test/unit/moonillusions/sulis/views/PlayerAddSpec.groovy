@@ -32,10 +32,10 @@ class PlayerAddSpec extends HtmlUnitViewSpec {
 	def "submits to add action"() {
 	
 		when:
-		def form = renderViewWithModel(xpath: "//form[//input[@type='submit' @value='Add player']]")
+		def form = renderViewWithModel(xpath: "//form[//input[@type='submit' and @value='Add player']]")
 		
 		then:
-		that form, hasAttribute("action","add")
+		that form, hasAttribute("action","/test/add")
 	}
 	
 	def "input field for player name"() {

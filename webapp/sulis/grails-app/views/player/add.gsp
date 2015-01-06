@@ -1,10 +1,10 @@
 <g:renderErrors as="list" bean="${command}"/>
 
-<form action="add">
-	<input 
+<g:form action="add">
+	<g:field 
 		type="text" 
 		name="name" 
 		value="${fieldValue(bean: command, field: 'name')}"
 		/>
-	<input type="submit" value="Add player"/>
-</form>
+	<g:submitButton name="update" value="Add player" />
+</g:form>

@@ -59,7 +59,7 @@ class PlayerControllerSpec extends Specification {
 
         then:
         playerService.create(_) >> { null }
-        model == command
+        model[PlayerController.MODEL_COMMAND] == command
     }
 
     void "add action redirects to game controller on success"() {
