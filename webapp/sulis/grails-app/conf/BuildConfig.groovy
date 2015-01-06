@@ -63,7 +63,7 @@ grails.project.dependency.resolution = {
         test "org.spockframework:spock-grails-support:0.7-groovy-2.0"
         test "com.moonillusions.htmlUnitMatchers:htmlUnitMatchers:0.1"
         //test 'net.sourceforge.htmlunit:htmlunit:2.13'
-
+		compile "org.jadira.usertype:usertype.jodatime:2.0"
         compile 'com.moonillusions.utils:PropertyNavigation:1.0-SNAPSHOT'
     }
 
